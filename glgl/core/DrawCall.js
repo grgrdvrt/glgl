@@ -94,7 +94,7 @@ export default class DrawCall
         this.ids.updateGL(gl);
       }
       gl.bindBuffer(consts.ELEMENT_ARRAY_BUFFER, this.ids.buffer);
-      gl.drawElements(this.drawMethod, this.ids.count, gl.UNSIGNED_SHORT, 0);
+      gl.drawElements(this.drawMethod, this.ids.count, this.ids.type, 0);
     }
   }
 }

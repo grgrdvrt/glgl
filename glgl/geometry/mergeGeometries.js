@@ -13,8 +13,8 @@ export default function mergeGeometries(geometries, additionalNames = []){
     let bufferLength = datas.reduce((n, data) => {
       return n + data.params.ids.data.length;
     }, 0);
-    console.warn("only Uint16Arrays");
-    let resultBuffer = new Uint16Array(bufferLength);
+    //console.warn("only Uint16Arrays");
+    let resultBuffer = new Uint32Array(bufferLength);
 
     datas.reduce((result, data) => {
       let buffer = data.params.ids.data;

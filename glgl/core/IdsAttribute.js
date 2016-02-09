@@ -10,10 +10,20 @@ export default class IdsAttribute
     this.location = undefined;
     this.isInit = false;
     this.needsUpdate = true;
+    this.type = consts.UNSIGNED_SHORT;
   }
 
   initGL(gl, program)
   {
+    if(this.data.constructor === Uint32Array){
+      let extension = gl.getExtension("OES_element_index_uint");
+      if(extension === undefined){
+        console.warn("extension 'OES_element_index_uint' not available, large meshes won't render properly");
+      }
+      else {
+        this.type = consts.UNSIGNED_INT;
+      }
+    }
     this.buffer = gl.createBuffer();
     this.location = gl.getAttribLocation(program, "ids");
     this.isInit = true;
