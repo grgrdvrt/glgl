@@ -32,7 +32,6 @@ export default class Program
   readShaderInfos(gl, src)
   {
     var shaderInfos = parseShader(src);
-    //console.log("shaderInfos", shaderInfos);
 
     var attributes = shaderInfos.attribute;
     var uniforms = shaderInfos.uniform;

@@ -20,8 +20,8 @@ export default class Context
     try { this.glContext = this.canvas.getContext("webgl"); } catch (e) { }
     if (!this.glContext) console.log("Could not initialise WebGL, sorry :-(");
 
-    console.log(this.glContext.getSupportedExtensions().join("\n"));
-    console.log(this.glContext);
+    //console.log(this.glContext.getSupportedExtensions().join("\n"));
+    //console.log(this.glContext);
 
     this.viewport.initGL(this.glContext);
     this.clear();

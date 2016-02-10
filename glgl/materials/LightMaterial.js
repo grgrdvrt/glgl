@@ -6,7 +6,7 @@ var vertex = `precision mediump float;
 
 attribute vec3 aVertexPosition;
 attribute vec3 aVertexNormal;
-attribute vec2 aUV;
+//attribute vec2 aUV;
 
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
@@ -14,7 +14,6 @@ uniform mat4 globalTransform;
 uniform mat3 normalMatrix;
 
 varying vec3 vPos;
-varying vec2 vUV;
 varying vec3 vNormal;
 
 void main(void)
@@ -22,7 +21,6 @@ void main(void)
 
   vec4 pos = vec4(aVertexPosition, 1.0);
   vPos = pos.xyz;
-  vUV = aUV;
   vNormal = normalize(normalMatrix * aVertexNormal);
   gl_Position = projectionMatrix * viewMatrix * globalTransform * pos;
 }`;
@@ -34,7 +32,6 @@ var fragment = `precision mediump float;
 uniform vec3 uColor;
 const vec3 off = vec3(-1.0, 0.0, 1.0);
 varying vec3 vPos;
-varying vec2 vUV;
 varying vec3 vNormal;
 
 struct Light {

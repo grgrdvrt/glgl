@@ -1,3 +1,4 @@
+import Vec3 from "../math/Vec3";
 
 //http://www.iquilezles.org/www/articles/normals/normals.htm
 

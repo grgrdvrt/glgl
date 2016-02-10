@@ -56,10 +56,11 @@ export default class DrawCall
 
   logInputs()
   {
-    console.table(this.shaderInputs.map(input => [
+    console.table([["ids", this.ids.data.toString()]].concat(this.shaderInputs.map(input => [
       input.inputName,
       (input.data !== undefined) ? input.data.toString() : undefined
-    ]));
+    ])));
+    console.log(this);
   }
 
 

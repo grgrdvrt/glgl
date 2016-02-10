@@ -1,6 +1,7 @@
-import utils from "../utils";
+import * as utils from "../utils";
 import servicesUtils from "./servicesUtils";
 
+let Q = window.Q;
 export default class DataLoader
 {
   constructor(url, options)
@@ -47,7 +48,9 @@ export default class DataLoader
       if(response === undefined) {
         response = request.responseText;
       }
-      deferred.resolve(this.parse(response));
+      //deferred.resolve(this.parse(response));
+      let result = this.parse(response);
+      deferred.resolve(result);
     });
 
     request.addEventListener("error", evt => {

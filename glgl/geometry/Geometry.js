@@ -10,7 +10,7 @@ export default class Geometry
 
   setInputs(inputs)
   {
-    this.drawCallData.setInputs(inputs);
+    this.drawCallData.set(inputs);
   }
 
 

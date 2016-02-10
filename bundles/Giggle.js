@@ -16,9 +16,9 @@ export default class Giggle
 {
   constructor()
   {
-    let canvas = document.createElement("canvas");
-    document.body.appendChild(canvas);
-    this.context = new Context(canvas);
+    this.canvas = document.createElement("canvas");
+    document.body.appendChild(this.canvas);
+    this.context = new Context(this.canvas);
 
     this.sceneRenderer = new SceneRenderer(this.context);
 

@@ -57,7 +57,7 @@ export default class Arcball
     if(!this.mouse.isDown)return;
     let endPoint = this.getPosOnSphere();
     let axis = endPoint.clone().cross(this.startPoint);
-    let angle = this.startPoint.angleWith(endPoint);
+    let angle = -this.startPoint.angleWith(endPoint);
     let rotation = (new Quaternion()).setRotationFromAxisAngle(axis, angle);
     let position = rotation.transformVector(this.initialPosition.clone());
     this.camera.position.copy(position);
