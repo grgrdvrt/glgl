@@ -3,6 +3,8 @@ import parseShader from "./parseShader";
 
 
 let typesNames = [];
+typesNames[consts.INT] = "int";
+typesNames[consts.FLOAT] = "float";
 typesNames[consts.FLOAT_VEC2] = "vec2";
 typesNames[consts.FLOAT_VEC3] = "vec3";
 typesNames[consts.FLOAT_VEC4] = "vec4";
