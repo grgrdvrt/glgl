@@ -2,9 +2,11 @@ import Mouse from "../../utils/Mouse";
 import Sphere from "../math/Sphere";
 import Ray from "../math/Ray";
 import Vec3 from "../math/Vec3";
+import Mat3 from "../math/Mat3";
 import Quaternion from "../math/Quaternion";
 
 
+let t = 0;
 export default class Arcball
 {
   constructor(domElement, camera)
@@ -56,12 +58,15 @@ export default class Arcball
   {
     if(!this.mouse.isDown)return;
     let endPoint = this.getPosOnSphere();
-    let axis = endPoint.clone().cross(this.startPoint);
+    let axis = endPoint.clone().cross(this.startPoint).normalize();
     let angle = -this.startPoint.angleWith(endPoint);
-    let rotation = (new Quaternion()).setRotationFromAxisAngle(axis, angle);
+    //axis = new Vec3(1, 0, 0);
+    //angle = 0.01 * t++;
+    //console.log(axis, angle);
+    let rotation = (new Mat3()).setRotation(axis.x, axis.y, axis.z, angle);
     let position = rotation.transformVector(this.initialPosition.clone());
     this.camera.position.copy(position);
-    this.camera.lookAt(new Vec3());
+    this.camera.lookAt(new Vec3(), new Vec3(0, 1, 0));
   }
 
 

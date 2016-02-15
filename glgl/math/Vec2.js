@@ -15,6 +15,14 @@ export default class Vec2
   }
 
 
+  copy(v)
+  {
+    this.x = v.x;
+    this.y = v.y;
+    return this;
+  }
+
+
   add(v)
   {
     this.x += v.x;

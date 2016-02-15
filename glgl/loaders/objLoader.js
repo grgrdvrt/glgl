@@ -2,8 +2,6 @@ import DataLoader from "../../utils/services/DataLoader";
 import Geometry from "../geometry/Geometry";
 import computeVertexNormals from "../geometry/computeVertexNormals";
 
-let Q = window.Q;
-
 export default class ObjLoader extends DataLoader
 {
   constructor(url, options)

@@ -2,6 +2,16 @@ import consts from "./consts";
 import parseShader from "./parseShader";
 
 
+let typesNames = [];
+typesNames[consts.FLOAT_VEC2] = "vec2";
+typesNames[consts.FLOAT_VEC3] = "vec3";
+typesNames[consts.FLOAT_VEC4] = "vec4";
+typesNames[consts.BOOL] = "bool";
+typesNames[consts.FLOAT_MAT2] = "mat2";
+typesNames[consts.FLOAT_MAT3] = "mat3";
+typesNames[consts.FLOAT_MAT4] = "mat4";
+typesNames[consts.SAMPLER_2D] = "sampler2D";
+typesNames[consts.SAMPLER_CUBE] = "samplerCube";
 
 export default class Program
 {
@@ -29,18 +39,63 @@ export default class Program
   }
 
 
-  readShaderInfos(gl, src)
+  extractAttributes(gl)
   {
-    var shaderInfos = parseShader(src);
+    let attributes = [];
+    let locationsCount = gl.getProgramParameter(this.glProgram, gl.ACTIVE_ATTRIBUTES );
+    for(let i = 0; i < locationsCount; i++ ) {
+      let infos = gl.getActiveAttrib(this.glProgram, i);
+      if(infos === -1 || infos === undefined || infos === null){
+        break;
+      }
+      attributes[i] = {
+        inputType : "attribute",
+        name: infos.name,
+        size: infos.size,
+        type: typesNames[infos.type],
+        location: gl.getAttribLocation(this.glProgram, infos.name ),
+      };
+    }
+    return attributes;
+  }
 
+
+  extractUniforms(gl)
+  {
+    let uniforms = [];
+    let locationsCount = gl.getProgramParameter(this.glProgram, gl.ACTIVE_UNIFORMS );
+    for(let i = 0; i < locationsCount; i++ ) {
+      let infos = gl.getActiveUniform(this.glProgram, i);
+      if(infos === -1 || infos === undefined || infos === null){
+        break;
+      }
+      uniforms[i] = {
+        inputType : "uniform",
+        name: infos.name,
+        size: infos.size,
+        type: typesNames[infos.type],
+        location: gl.getUniformLocation(this.glProgram, infos.name ),
+      };
+    }
+    return uniforms;
+  }
+
+
+  readShaderInfos(gl)
+  {
+    let shaderInfos = {
+      attribute:this.extractAttributes(gl),
+      uniform:this.extractUniforms(gl),
+    };
+
+    console.log(shaderInfos);
     var attributes = shaderInfos.attribute;
     var uniforms = shaderInfos.uniform;
     var addItem = item => this.shaderData[item.name] = item;
     attributes.forEach(addItem);
     uniforms.forEach(addItem);
     uniforms.forEach(item => {
-      var location = gl.getUniformLocation(this.glProgram, item.name);
-      this.uniformsLocations[item.name] = location;
+      this.uniformsLocations[item.name] = item.location;
     });
   }
 
@@ -52,8 +107,7 @@ export default class Program
     this.initShader(gl, this.fragmentShaderSrc, consts.FRAGMENT_SHADER);
     gl.linkProgram(this.glProgram);
 
-    this.readShaderInfos(gl, this.vertexShaderSrc);
-    this.readShaderInfos(gl, this.fragmentShaderSrc);
+    this.readShaderInfos(gl);
 
     if (!gl.getProgramParameter(this.glProgram, consts.LINK_STATUS)) {
       throw new Error("Could not initialise shaders");

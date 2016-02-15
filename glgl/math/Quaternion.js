@@ -64,6 +64,16 @@ export default class Quaternion
   }
 
 
+  add(quat)
+  {
+    this.x += quat.x;
+    this.y += quat.y;
+    this.z += quat.z;
+    this.w += quat.w;
+    return this;
+  }
+
+
   conjugate()
   {
     this.x *= -1;
@@ -136,57 +146,18 @@ export default class Quaternion
   }
 
 
-  lookAt(position, target)
+  lookAt(position, target, up)
   {
-    let newDir = (new Vec3()).copy(target).sub(position);
+    let newDir = (new Vec3()).copy(target).sub(position).normalize();
     let baseDir = new Vec3(0, 0, -1);
+    up = new Vec3(0, -1, 0);
     this.setRotationFromAxisAngle(
       baseDir.clone().cross(newDir),
       baseDir.angleWith(newDir)
     );
+
   }
 
-
-
-  //_rx, _ry, _rz should be updated with the other values
-  //would be a performances hell
-  /*
-  get rx () { return this._rx; }
-
-  set rx(value)
-  {
-    this._rx = value;
-    this.setFromEuler(this._rx, this._ry, this._rz);
-  }
-
-
-  get ry () { return this._ry; }
-
-  set ry(value)
-  {
-    this._ry = value;
-    this.setFromEuler(this._rx, this._ry, this._rz);
-  }
-
-
-  get rz () { return this._rz; }
-
-  set rz(value)
-  {
-    this._rz = value;
-    this.setFromEuler(this._rx, this._ry, this._rz);
-  }
-
-
-  setFromEuler(x, y, z)
-  {
-    this.set(Math.cos(x/2), Math.sin(x/2), 0, 0);
-    let qy = new Quaternion(Math.cos(y/2), 0, Math.sin(y/2), 0);
-    let qz = new Quaternion(Math.cos(z/2), 0, 0, Math.sin(z/2));
-    this.mulityply(qy);
-    this.mulityply(qz);
-    return this;
-  }*/
 
 
   clone()

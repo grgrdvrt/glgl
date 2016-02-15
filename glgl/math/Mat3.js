@@ -1,5 +1,14 @@
+import Vec3 from "./Vec3";
+
 //row major 3x3 matrix
 //www.j3d.org/matrix_faq/matrfaq_latest.html
+
+
+let tx = new Vec3();
+let ty = new Vec3();
+let tz = new Vec3();
+
+
 export default class Mat3
 {
   constructor(
@@ -48,14 +57,14 @@ export default class Mat3
   }
 
 
-  transformVector(vec)
+  transformVector(v)
   {
     var t = this.data;
     var x = v.x, y = v.y, z = v.z;
     v.x = t[0] * x + t[3] * y + t[6] * z;
     v.y = t[1] * x + t[4] * y + t[7] * z;
     v.z = t[2] * x + t[5] * y + t[8] * z;
-    return this;
+    return v;
   }
 
 
@@ -100,9 +109,48 @@ export default class Mat3
   get determinant()
   {
     var t = this.data;
-    return (t[0] * (t[4] * t[8] - t[5] * t[7]) - 
-            t[3] * (t[1] * t[8] - t[2] * t[7]) + 
-            t[6] * (t[1] * t[5] - t[2] * t[4]));
+    return (
+      t[0] * (t[4] * t[8] - t[5] * t[7]) - 
+      t[3] * (t[1] * t[8] - t[2] * t[7]) + 
+      t[6] * (t[1] * t[5] - t[2] * t[4])
+    );
+  }
+
+
+  setRotation(x, y, z, angle)
+  {
+    let s = 1 / Math.hypot(x, y, z);
+    x *= s;
+    y *= s;
+    z *= s;
+
+    let si = Math.sin(angle);
+    let co = Math.cos(angle);
+    let ic = 1 - co;
+
+    return this.set(
+      x * x * ic + co, y * x * ic - si * z,z * x * ic + si * y,
+      x * y * ic + si * z, y * y * ic + co,z * y * ic - si * x,
+      x * z * ic - si * y, y * z * ic + si * x,z * z * ic + co
+    );
+  }
+
+
+  rotate(x, y, z, angle)
+  {
+    let s = 1 / Math.hypot(x, y, z);
+    x *= s;
+    y *= s;
+    z *= s;
+    let si = Math.sin(angle);
+    let co = Math.cos(angle);
+    let ic = 1 - co;
+
+    return this.multiply(
+      x * x * ic + co, y * x * ic - si * z,z * x * ic + si * y,
+      x * y * ic + si * z, y * y * ic + co,z * y * ic - si * x,
+      x * z * ic - si * y, y * z * ic + si * x,z * z * ic + co
+    );
   }
 
 
@@ -137,6 +185,29 @@ export default class Mat3
       t[3], t[4], t[5],
       t[6], t[7], t[8]
     );
+  }
+
+
+  lookAt(position, target, up)
+  {
+    tz.copy(target).sub(position).normalize();
+    tx.copy(tz).cross(up).normalize();
+    if(tx.length === 0){
+      if(tx.x === 0){
+        tx.set(1, 0, 0);
+      }
+      else {
+        tx.set(-(tx.y + tx.z) / tx.x, 1, 1).normalize();
+      }
+    }
+    ty.copy(tx).cross(tz);
+
+    this.set(
+      tx.x, ty.x, -tz.x,
+      tx.y, ty.y, -tz.y,
+      tx.z, ty.z, -tz.z
+    );
+    return this;
   }
 
 

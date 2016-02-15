@@ -70,6 +70,50 @@ export default class Mat4
     return this;
   }
 
+  multiplyMat3(m)
+  {
+    let t = m.data;
+    this.multiply3(
+      t[0], t[3], t[6],
+      t[1], t[4], t[7],
+      t[2], t[5], t[8]
+    );
+    return this;
+  }
+
+
+  multiply3(a, b, c, d, e, f, g, h, i)
+  {
+    let t = this.data;
+    let t0 = t[0], t4 = t[4], t8 = t[8], t12 = t[12];
+    let t1 = t[1], t5 = t[5], t9 = t[9], t13 = t[13];
+    let t2 = t[2], t6 = t[6], t10 = t[10], t14 = t[14];
+    let t3 = t[3], t7 = t[7], t11 = t[11], t15 = t[15];
+
+
+    t[0] = a * t0 + b * t1 + c * t2 + d * t3;
+    t[1] = e * t0 + f * t1 + g * t2 + h * t3;
+    t[2] = i * t0;
+    t[3] = t3;
+
+    t[4] = a * t4 + b * t5 + c * t6 + d * t7;
+    t[5] = e * t4 + f * t5 + g * t6 + h * t7;
+    t[6] = i * t4;
+    t[7] = t7;
+
+    t[8] = a * t8 + b * t9 + c * t10 + d * t11;
+    t[9] = e * t8 + f * t9 + g * t10 + h * t11;
+    t[10] = i * t8;
+    t[11] = t11;
+
+    t[12] = a * t12 + b * t13 + c * t14 + d * t15;
+    t[13] = e * t12 + f * t13 + g * t14 + h * t15;
+    t[14] = i * t12;
+    t[15] = t15;
+
+    return this;
+  }
+
 
   scaleV(v) { this.scale(v.x, v.y, v.z); }
 
