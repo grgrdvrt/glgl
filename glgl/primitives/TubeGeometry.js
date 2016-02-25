@@ -1,53 +1,6 @@
 import DrawCallData from "../core/DrawCallData";
 import Vec3 from "../math/Vec3";
 
-export default class TubeGeometry
-{
-  constructor(pts, sides)
-  {
-    this.drawCallData = new DrawCallData();
-    this.updateBuffers(pts, sides);
-  }
-
-  updateBuffers(pts, sides)
-  {
-    let vectors = computeVectors(pts);
-
-    let vertices = computeVertices(pts, vectors.vas, vectors.vbs, sides);
-    let ids = computeIds(vertices.positions, sides);
-    let uvs = computeUvs(vertices.positions, sides);
-    let levelsData = computeLevels(pts, sides);
-
-    let lineNormals = vectors.vas.reduce((vas, v, i) => {
-      for(let j = 0; j < sides; j++){
-        let id = 3 * (sides * i + j);
-        vas[id] = v.x;
-        vas[id + 1] = v.y;
-        vas[id + 2] = v.z;
-      }
-      return vas;
-    }, new Float32Array(vertices.positions.length));
-
-    this.drawCallData.set({
-      aVertexPosition:vertices.positions,
-      aVertexNormal:vertices.normals,
-      aCenter:vertices.centers,
-      aLevel:levelsData.levels,
-      aLevelRatio:levelsData.levelRatios,
-      aLineNormal:lineNormals,
-      ids:ids,
-      aUV:uvs,
-    });
-
-    return vectors;
-  }
-
-  getDrawCallData()
-  {
-    return this.drawCallData;
-  }
-}
-
 
 function flipNormals(normals){
   let n = normals.length;
@@ -178,5 +131,54 @@ function computeLevels(pts, sides)
     levels:levels,
     levelRatios:levelRatios
   };
+}
+
+
+
+export default class TubeGeometry
+{
+  constructor(pts, sides)
+  {
+    this.drawCallData = new DrawCallData();
+    this.updateBuffers(pts, sides);
+  }
+
+  updateBuffers(pts, sides)
+  {
+    let vectors = computeVectors(pts);
+
+    let vertices = computeVertices(pts, vectors.vas, vectors.vbs, sides);
+    let ids = computeIds(vertices.positions, sides);
+    let uvs = computeUvs(vertices.positions, sides);
+    let levelsData = computeLevels(pts, sides);
+
+    let lineNormals = vectors.vas.reduce((vas, v, i) => {
+      for(let j = 0; j < sides; j++){
+        let id = 3 * (sides * i + j);
+        vas[id] = v.x;
+        vas[id + 1] = v.y;
+        vas[id + 2] = v.z;
+      }
+      return vas;
+    }, new Float32Array(vertices.positions.length));
+
+    this.drawCallData.setIds(ids);
+    this.drawCallData.setAttributes({
+      aVertexPosition:vertices.positions,
+      aVertexNormal:vertices.normals,
+      aCenter:vertices.centers,
+      aLevel:levelsData.levels,
+      aLevelRatio:levelsData.levelRatios,
+      aLineNormal:lineNormals,
+      aUV:uvs
+    });
+
+    return vectors;
+  }
+
+  getDrawCallData()
+  {
+    return this.drawCallData;
+  }
 }
 

@@ -45,7 +45,7 @@ export default class RttTexture extends Texture
   {
     gl.activeTexture(gl.TEXTURE0 + this.textureId);
     gl.bindTexture(gl.TEXTURE_2D, this.glTexture);
-    gl.generateMipmap(gl.TEXTURE_2D);
+    //gl.generateMipmap(gl.TEXTURE_2D);
     gl.bindTexture(gl.TEXTURE_2D, null);
     this.needsUpdate = false;
   }

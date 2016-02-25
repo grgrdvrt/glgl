@@ -29,10 +29,10 @@ export default class QuadGeometry
       0, 3, 2
     ]);
 
-    this.drawCallData.set({
+    this.drawCallData.setIds(ids);
+    this.drawCallData.setAttributes({
       aVertexPosition:positions,
       aUV:uvs,
-      ids:ids
     });
 
   }

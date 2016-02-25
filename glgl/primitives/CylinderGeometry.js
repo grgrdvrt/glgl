@@ -122,11 +122,11 @@ export default class CylinderGeometry
     }
 
 
-    this.drawCallData.set({
+    this.drawCallData.setIds(ids);
+    this.drawCallData.setAttributes({
       aVertexPosition:positions,
       aVertexNormal:normals,
       aUV:uvs,
-      ids:ids
     });
   }
 

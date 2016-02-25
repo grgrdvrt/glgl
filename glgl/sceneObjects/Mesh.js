@@ -27,7 +27,7 @@ export default class Mesh extends SceneNode
 
   getDrawCallData()
   {
-    this.drawCallData.set({
+    this.drawCallData.setUniforms({
       globalTransform: this._globalTransform,
       normalMatrix:this.normalMatrix
     });

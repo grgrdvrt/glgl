@@ -46,14 +46,13 @@ struct Light {
   vec3 ambient;
   vec3 direction;
   vec3 position;
-  vec3 positions[3];
   mat4 globalTransform;
 };
 
 
 const int N_LIGHTS = 2;
 
-uniform Light lights[2];
+uniform Light lights[N_LIGHTS];
 
 void main(void)
 {
@@ -77,27 +76,17 @@ export default class TestMaterial
   {
     this.drawCallData = new DrawCallData();
     this.drawCallData.params.program = new Program(vertex, fragment);
-
-  }
-
-  get texture(){ return this._texture; }
-
-  set texture(value)
-  {
-    this._texture = value;
-    this.drawCallData.set({ uSampler:this._texture });
-  }
-
-  get texture2(){return this._texture2;}
-  set texture2(value)
-  {
-    this._texture2 = value;
-    this.drawCallData.set({ uSampler2:this._texture2 });
+    this.texture = undefined;
+    this.texture2 = undefined;
   }
 
 
   getDrawCallData()
   {
+    this.drawCallData.setUniforms({
+      uSampler:this.texture,
+      uSampler2:this.texture2
+    });
     return this.drawCallData;
   }
 }

@@ -16,13 +16,20 @@ export default class Camera extends SceneNode
     this._viewMatrix = new Mat4();
     this._projectionMatrix = new Mat4();
 
-    this.computeProjectionMatrix();
+    this._projectionChanged = true;
   }
 
 
   computeProjectionMatrix()
   {
-    Mat4.projection(this._fov, this.aspect, this._near, this._far, this._projectionMatrix);
+    Mat4.projection(
+      this._fov,
+      this._aspect,
+      this._near,
+      this._far,
+      this._projectionMatrix
+    );
+    this._projectionChanged = false;
   }
 
 
@@ -35,38 +42,44 @@ export default class Camera extends SceneNode
   set fov(value)
   {
     this._fov = value;
-    this.computeProjectionMatrix();
+    this._projectionChanged = true;
   }
 
   set aspect(value)
   {
     this._aspect = value;
-    this.computeProjectionMatrix();
+    this._projectionChanged = true;
   }
 
   set near(value)
   {
     this._near = value;
-    this.computeProjectionMatrix();
+    this._projectionChanged = true;
   }
 
   set far(value)
   {
     this._far = value;
-    this.computeProjectionMatrix();
+    this._projectionChanged = true;
   }
 
 
   getDrawCallData()
   {
+    if(this._projectionChanged){
+      this.computeProjectionMatrix();
+    }
     this._viewMatrix.copy(this._globalTransform);
     this._viewMatrix.invert();
     //console.log(this._viewMatrix.toString());
     //
-    this.drawCallData.set({
-      viewMatrix : this._viewMatrix,
-      projectionMatrix : this._projectionMatrix,
-      cameraPosition : this.position
+    this.drawCallData.setUniforms({
+      camera:{
+        globalTransform: this._globalTransform,
+        transform: this._viewMatrix,
+        projection: this._projectionMatrix,
+        position : this.position
+      }
     });
     return this.drawCallData;
   }

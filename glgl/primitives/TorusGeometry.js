@@ -79,11 +79,11 @@ export default class TorusGeometry
       ids[id + 5] = i + nx;
     }
 
-    this.drawCallData.set({
+    this.drawCallData.setIds(ids);
+    this.drawCallData.setAttributes({
       aVertexPosition:positions,
       aVertexNormal:normals,
       aUV:uvs,
-      ids:ids
     });
   }
 

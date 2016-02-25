@@ -2,21 +2,29 @@ import DrawCallData from "../core/DrawCallData";
 
 export default class Geometry
 {
-  constructor(inputs)
+  constructor(buffers, ids)
   {
     this.drawCallData = new DrawCallData();
-    this.setInputs(inputs);
+    this.setIds(ids);
+    this.setAttributes(buffers, ids);
   }
 
-  setInputs(inputs)
+
+  setIds(ids)
   {
-    this.drawCallData.set(inputs);
+    this.drawCallData.setIds(ids);
+  }
+
+
+  setAttributes(buffers)
+  {
+    this.drawCallData.setAttributes(buffers);
   }
 
 
   getDrawCallData()
   {
-    let positionInput = this.drawCallData.getInput("aVertexPosition");
+    let positionInput = this.drawCallData.attributes.aVertexPosition;
     if(positionInput === undefined){
       console.warn("missing aVertexPosition, is it intended?");
     }

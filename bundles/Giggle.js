@@ -34,15 +34,14 @@ export default class Giggle
     this.light = new Light();
     this.scene.add(this.light);
 
-
     this.context.viewport.resized.add((w, h) => this.camera.aspect = w / h);
 
   }
 
 
-  set(data)
+  setUniforms(uniforms)
   {
-    this.sceneRenderer.set(data);
+    this.sceneRenderer.setUniforms(uniforms);
   }
 
 
@@ -66,22 +65,21 @@ export default class Giggle
     if(this.updateCallback !== undefined){
       this.updateCallback(frameId);
     }
-    this.sceneRenderer.set({time:frameId});
+    this.sceneRenderer.setUniforms({time:frameId});
     this.render();
   }
 
 
   render()
   {
-    this.sceneRenderer.render(this.scene, this.camera);
+    return this.sceneRenderer.render(this.scene, this.camera);
   }
 
 
   debug()
   {
     this.loop.pause();
-    let drawCalls = this.sceneRenderer.render(this.scene, this.camera);
-    drawCalls.forEach(dc => dc.logInputs());
+    let drawCalls = this.render();
   }
 }
 

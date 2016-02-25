@@ -1,19 +1,19 @@
-import DrawCallData from "../core/DrawCallData";
+import Geometry from "../geometry/Geometry";
 
 export default function mergeGeometries(geometries, additionalNames = []){
 
-
   let datas = geometries.map(geom => geom.getDrawCallData());
-  let inputs = {};
 
-
-
+  let ids;
   let mergeIds = () => {
 
     let bufferLength = datas.reduce((n, data) => {
+      if(data.params.ids === undefined) {
+        //TODO support geometries without ids
+        throw new Error("geometries without not supported yet");
+      }
       return n + data.params.ids.data.length;
     }, 0);
-    //console.warn("only Uint16Arrays");
     let resultBuffer = new Uint32Array(bufferLength);
 
     datas.reduce((result, data) => {
@@ -23,24 +23,27 @@ export default function mergeGeometries(geometries, additionalNames = []){
         result.buffer[result.indexBegin + i] = result.positionBegin + buffer[i];
       }
       result.indexBegin += n;
-      result.positionBegin += data.getInput("aVertexPosition").data.length / 3;
+      result.positionBegin += data.attributes.aVertexPosition.data.length / 3;
       return result;
     }, {indexBegin:0, positionBegin:0, buffer:resultBuffer});
-    inputs.ids = resultBuffer;
+    ids = resultBuffer;
   };
 
 
-  let mergeBuffer = (inputName) => {
+  let buffers = {};
+  let mergeBuffer = inputName => {
 
-    let bufferType = datas[0].getInput(inputName).data.constructor;
+    let sample = datas[0].attributes[inputName];
+    if(sample === undefined) return;
+    let bufferType = sample.data.constructor;
     let bufferLength = datas.reduce((n, data) => {
-      let buffer = data.getInput(inputName).data;
+      let buffer = data.attributes[inputName].data;
       return n + buffer.length;
     }, 0);
     let resultBuffer = new bufferType(bufferLength);
 
     datas.reduce((result, data) => {
-      let buffer = data.getInput(inputName).data;
+      let buffer = data.attribute[inputName].data;
       let n = buffer.length;
       for(let i = 0; i < n; i++){
         result.buffer[result.indexBegin + i] = buffer[i];
@@ -48,7 +51,7 @@ export default function mergeGeometries(geometries, additionalNames = []){
       result.indexBegin += n;
       return result;
     }, {indexBegin:0, buffer:resultBuffer});
-    inputs[inputName] = resultBuffer;
+    buffers[inputName] = resultBuffer;
   };
 
 
@@ -57,9 +60,5 @@ export default function mergeGeometries(geometries, additionalNames = []){
   let names = [ "aVertexPosition", "aUV", "aVertexNormal" ].concat(additionalNames);
   names.forEach(mergeBuffer);
 
-  let drawCallData = new DrawCallData(inputs);
-
-  return {
-    getDrawCallData : () => drawCallData
-  };
+  return new Geometry(buffers, ids);
 }

@@ -59,12 +59,12 @@ export default class SolidMaterial
       ((this._color >> 8) & 0xff) / 0xff,
       (this._color & 0xff) / 0xff
     );
-    this.drawCallData.set({ uColor:this._rgb });
   }
 
 
   getDrawCallData()
   {
+    this.drawCallData.setUniforms({ uColor:this._rgb });
     return this.drawCallData;
   }
 }

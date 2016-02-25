@@ -1,15 +1,26 @@
+import DrawCallData from "../core/DrawCallData";
+
 export default class LightsVisitor
 {
-  constructor(id)
+  constructor()
   {
-    this.id = id;
-    this.result = [];
+    this.lights = [];
+    this.lightsDrawCallDatas = [];
+    this.drawCallData = new DrawCallData();
   }
 
   enterNode(node)
   {
     if(node.isLightEmitter){
-      this.result.push(node.getDrawCallData());
+      this.lights.push(node);
+      this.lightsDrawCallDatas.push(node.getDrawCallData());
+      if(node.lightType !== undefined){
+        let defineName = `${node.lightType.toUpperCase()}_LIGHT_COUNT`;
+        if(this.drawCallData.defines[defineName] === undefined){
+          this.drawCallData.defines[defineName] = 0;
+        }
+        this.drawCallData.defines[defineName]++;
+      }
     }
     return true;
   }
@@ -18,6 +29,12 @@ export default class LightsVisitor
 
   getResult()
   {
-    return this.result;
+    return {
+      drawCallData:[
+        this.drawCallData,
+        this.lightsDrawCallDatas
+      ],
+      lights:this.lights
+    };
   }
 }

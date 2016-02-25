@@ -157,23 +157,23 @@ export default class Mat3
   invert()
   {
     var det = this.determinant;
-    if(Math.abs(det) < 0.0005){
+    if(det === 0){
       return this.identity();
     }
     var t = this.data;
 
     var iDet = 1 / det;
-    return this.set(
-      (t[4] * t[8] - t[7] * t[5]) * iDet,
-     -(t[3] * t[8] - t[5] * t[6]) * iDet,
-      (t[3] * t[7] - t[4] * t[6]) * iDet,
-     -(t[1] * t[8] - t[7] * t[2]) * iDet,
-      (t[0] * t[8] - t[2] * t[6]) * iDet,
-     -(t[0] * t[7] - t[1] * t[6]) * iDet,
-      (t[1] * t[5] - t[2] * t[4]) * iDet,
-     -(t[0] * t[5] - t[2] * t[3]) * iDet,
-      (t[0] * t[4] - t[3] * t[1]) * iDet
-    );
+     return this.set(
+       (t[4] * t[8] - t[5] * t[7])  *  iDet,
+       (t[5] * t[6] - t[3] * t[8])  *  iDet,
+       (t[3] * t[7] - t[4] * t[6])  *  iDet,
+       (t[2] * t[7] - t[1] * t[8])  *  iDet,
+       (t[0] * t[8] - t[2] * t[6])  *  iDet,
+       (t[1] * t[6] - t[0] * t[7])  *  iDet,
+       (t[1] * t[5] - t[2] * t[4])  *  iDet,
+       (t[2] * t[3] - t[0] * t[5])  *  iDet,
+       (t[0] * t[4] - t[1] * t[3])  *  iDet
+     );
   }
 
 

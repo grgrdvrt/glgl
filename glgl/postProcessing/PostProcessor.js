@@ -1,20 +1,4 @@
-let vertexSrc = `precision mediump float;
-
-attribute vec3 aVertexPosition;
-attribute vec2 aUV;
-
-varying vec3 vPos;
-varying vec2 vUV;
-
-void main(void)
-{
-
-  vec4 pos = vec4(aVertexPosition.xy, 0.0, 1.0);
-  vPos = pos.xyz;
-  vUV = aUV;
-  gl_Position = pos;
-}`;
-
+import FrameBuffer from "../core/FrameBuffer";
 
 
 let displaySrc = `precision mediump float;
@@ -29,28 +13,100 @@ void main(void)
 
 export default class PostProcessor
 {
-  constructor(context)
+  constructor(context, passes)
   {
     this.context = context;
-    this.passes = [];
+    this.passes = passes;
+
+    this.autoClear = true;
+
+    //this.viewport = new Viewport();
+    //this.resize(width, height);
+    //
+    this.readBuffer = new FrameBuffer(
+      this.context.width,
+      this.context.height
+    );
+    this.readBuffer.name = "first";
+    this.writeBuffer = new FrameBuffer(
+      this.context.width,
+      this.context.height
+    );
+    this.writeBuffer.name = "second";
+    this.name = "pp";
+
+    this.isInit = false;
   }
 
-  add(pass)
+
+  initGL(gl)
   {
-    this.passes.push(pass);
+    this.readBuffer.initGL(gl);
+    this.writeBuffer.initGL(gl);
+    this.isInit = true;
   }
 
 
-  apply(input, output)
+  get glFrameBuffer()
   {
-    let drawCalls = this.passes.map(pass => {
-      let data = pass.getDrawCallData();
-      data.params.program = new Program(vertexSrc, pass.getShader());
-      return new DrawCall(data);
+    return this.writeBuffer.glFrameBuffer;
+  }
+
+
+  get texture()
+  {
+    return this.readBuffer.texture;
+  }
+
+  get viewport()
+  {
+    return this.writeBuffer.viewport;
+  }
+
+
+  exec(input, output)
+  {
+    this.swapBuffers();
+    let drawCalls = this.passes.map((pass, i, arr) => {
+      if(!pass.isInit){
+        pass.init(this.context);
+      }
+      let writeBuffer = i === arr.length - 1 ? output : this.writeBuffer;
+      pass.exec(this.readBuffer, writeBuffer);
+      this.swapBuffers();
     });
-
-
-    drawCalls.forEach(d => d.exec(context, output));
   }
 
+
+  toScreen()
+  {
+    this.exec(this.readBuffer, this.context);
+  }
+
+
+  toTexture()
+  {
+    this.exec(this.readBuffer, this.writeBuffer);
+    this.swapBuffers();
+    return this.readBuffer;
+  }
+
+
+  swapBuffers()
+  {
+    let temp = this.readBuffer;
+    this.readBuffer = this.writeBuffer;
+    this.writeBuffer = temp;
+  }
+
+
+  clear()
+  {
+    this.readBuffer.clear();
+    this.writeBuffer.clear();
+  }
+
+  dispose()
+  {
+  }
 }

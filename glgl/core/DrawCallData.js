@@ -1,42 +1,48 @@
-import ShaderInput from "./ShaderInput";
 import IdsAttribute from "./IdsAttribute";
+import AttributeBuffer from "./AttributeBuffer";
 
 export default class DrawCallData
 {
-  constructor(props)
+  constructor(attributes, uniforms)
   {
     this.params = {};
-    this.inputs = [];
-    this.set(props);
-  }
-
-
-  set(data)
-  {
-    for(var k in data){
-      this.addInput(k, data[k]);
+    this.defines = {};
+    this.attributes = {};
+    this.uniforms = {};
+    if(attributes !== undefined){
+      this.setAttributes(attributes);
+    }
+    if(uniforms !== undefined){
+      this.setUniforms(uniforms);
     }
   }
 
 
-  getInput(inputName)
+  setIds(data)
   {
-    return this.inputs.filter(input => input.inputName === inputName)[0];
+    if(this.params.ids === undefined){
+      this.params.ids = new IdsAttribute();
+    }
+    this.params.ids.setData(data);
   }
 
 
-  addInput(inputName, data)
+  setAttributes(data)
   {
-    let input = this.getInput(inputName);
-    if(input !== undefined){
-      input.setData(data);
-      return;
+    for(let name in data){
+      let aBuffer = this.attributes[name];
+      if(aBuffer === undefined){
+        aBuffer = this.attributes[name] = new AttributeBuffer();
+      }
+      aBuffer.setData(data[name]);
     }
-    if(inputName === "ids"){
-      this.params.ids = new IdsAttribute(inputName, data);
-    }
-    else {
-      this.inputs.push(new ShaderInput(inputName, data));
+  }
+
+
+  setUniforms(data)
+  {
+    for(let name in data){
+      this.uniforms[name] = data[name];
     }
   }
 }

@@ -20,7 +20,7 @@ export default class Arcball
     this.friction = 0.9;
     this.lastMousePos = new Vec2();
 
-    this.rotation = new Vec2(Math.PI / 2, 0);
+    this.rotation = new Vec2(-Math.PI / 2, 0);
 
 
     this.mouse = new Mouse(this.domElement);

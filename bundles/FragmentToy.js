@@ -6,6 +6,9 @@ import Program from "../glgl/core/Program";
 import Mesh from "../glgl/sceneObjects/Mesh";
 import QuadGeometry from "../glgl/primitives/QuadGeometry";
 import Loop from "../utils/Loop";
+import Mouse from "../utils/Mouse";
+
+import Texture from "../glgl/core/Texture";
 
 
 let vertex = `precision mediump float;
@@ -13,26 +16,23 @@ let vertex = `precision mediump float;
 attribute vec3 aVertexPosition;
 
 uniform float time;
-uniform vec2 screenSize;
+uniform vec2 uFrameSize;
 
-varying vec3 vPos;
+varying vec2 vPos;
 
 void main(void)
 {
-
-  vec2 pixelRatio = vec2(1.0, screenSize.y / screenSize.x);
-  vec4 pos = vec4(aVertexPosition.xy * pixelRatio, 0.0, 1.0);
-  vPos = pos.xyz;
-  gl_Position = pos;
+  vPos = aVertexPosition.xy;
+  gl_Position = vec4(aVertexPosition, 1.0);
 }`;
 
 
 let defaultFragment = `precision mediump float;
 
-uniform vec2 screenSize;
+uniform vec2 uFrameSize;
 uniform float time;
 const vec3 off = vec3(-1.0, 0.0, 1.0);
-varying vec3 vPos;
+varying vec2 vPos;
 
 vec3 white = vec3(1.0);
 vec3 black = vec3(0.0);
@@ -48,16 +48,16 @@ void main(void)
 
 export default class FragmentToy
 {
-  constructor()
+  constructor(canvas)
   {
-    this.conteyt = new Context(document.getElementById("canvas"));
+    this.context = new Context(canvas);
     this.drawCallData = new DrawCallData();
     this.quad = new QuadGeometry();
-    this.setFragmentShader(defaultFragment);
+    this.setSource(defaultFragment);
   }
 
 
-  setFragmentShader(fragment)
+  setSource(fragment)
   {
     this.drawCallData.params.program = new Program(vertex, fragment);
   }
@@ -70,26 +70,26 @@ export default class FragmentToy
   }
 
 
-  set(values)
+  setUniforms(values)
   {
-    this.drawCallData.set(values);
+    this.drawCallData.setUniforms(values);
   }
 
 
   render(frameId)
   {
-    this.viewport.update();
+    this.context.clear();
     if(this.loopCallback !== undefined) {
-      this.loopCallback();
+      this.loopCallback(frameId);
     }
     let drawCall = new DrawCall([
       this.quad.getDrawCallData(),
+      this.context.viewport.getDrawCallData(),
       this.drawCallData
     ]);
     drawCall.exec(this.context);
   }
 }
-
-
-var toy = new FragmentToy();
-toy.start();
+window.FragmentToy = FragmentToy;
+FragmentToy.Texture = Texture;
+FragmentToy.Mouse = Mouse;

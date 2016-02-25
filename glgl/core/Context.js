@@ -25,6 +25,8 @@ export default class Context
 
     this.viewport.initGL(this.glContext);
     this.clear();
+
+    this.isInit = true;
   }
 
 
@@ -57,7 +59,7 @@ export default class Context
 
   resize(w, h)
   {
-    if(this.viewport.width === undefined){
+    /*if(this.viewport.width === undefined){
       this.viewport.resize(w, h);
     }
     else {
@@ -65,7 +67,8 @@ export default class Context
         w * this.viewport.width / this.width,
         h * this.viewport.height / this.height
       );
-    }
+    }*/
+    this.viewport.resize(w, h);
     this.width = w;
     this.height = h;
     this.canvas.width = this.width;

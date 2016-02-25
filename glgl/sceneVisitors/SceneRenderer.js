@@ -14,9 +14,9 @@ export default class SceneRenderer
   }
 
 
-  set(data)
+  setUniforms(uniforms)
   {
-    this.drawCallData.set(data);
+    this.drawCallData.setUniforms(uniforms);
   }
 
   
@@ -42,10 +42,12 @@ export default class SceneRenderer
     if(drawCalls.length === 0){
       console.warn("Scene doesn't contain any drawable object");
     }
+
+    let lightsResult = lightsVisitor.getResult();
     drawCalls.forEach(drawCall => {
       drawCall.addData([
         this.drawCallData,
-        lightsVisitor.getResult(),
+        lightsResult.drawCallData,
         target.viewport.getDrawCallData(),
         camera.getDrawCallData()
       ]);

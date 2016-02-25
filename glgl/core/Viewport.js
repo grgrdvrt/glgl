@@ -44,7 +44,7 @@ export default class Viewport
 
   getDrawCallData()
   {
-    this.drawCallData.set({
+    this.drawCallData.setUniforms({
       "uFrameSize":this.frameSize
     });
     return this.drawCallData;

@@ -50,16 +50,9 @@ export default class TextureMaterial
 
   }
 
-  get texture(){ return this._texture; }
-
-  set texture(value)
-  {
-    this._texture = value;
-    this.drawCallData.set({ uSampler:this._texture });
-  }
-
   getDrawCallData()
   {
+    this.drawCallData.setUniforms({ uSampler:this.texture });
     return this.drawCallData;
   }
 }
