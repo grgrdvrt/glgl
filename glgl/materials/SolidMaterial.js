@@ -1,6 +1,6 @@
 import Program from "../core/Program";
 import DrawCallData from "../core/DrawCallData";
-import Vec3 from "../math/Vec3";
+import Color from "../math/Color";
 
 var vertex = `precision mediump float;
 
@@ -45,26 +45,13 @@ export default class SolidMaterial
     this.drawCallData = new DrawCallData();
     this.drawCallData.params.program = new Program(vertex, fragment);
 
-    this._rgb = new Vec3();
-    this.color = color;
-  }
-
-
-  get color(){return this._color;}
-  set color(value)
-  {
-    this._color = value;
-    this._rgb.set(
-      ((this._color >> 16) & 0xff) / 0xff,
-      ((this._color >> 8) & 0xff) / 0xff,
-      (this._color & 0xff) / 0xff
-    );
+    this.color = new Color(color);
   }
 
 
   getDrawCallData()
   {
-    this.drawCallData.setUniforms({ uColor:this._rgb });
+    this.drawCallData.setUniforms({ uColor:this.color });
     return this.drawCallData;
   }
 }

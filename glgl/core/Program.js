@@ -116,7 +116,6 @@ export default class Program
     this.attributesInputs = inputs.attributes;
     this.uniformsInputs = inputs.uniforms;
 
-    console.log(inputs);
     if (!gl.getProgramParameter(this.glProgram, consts.LINK_STATUS)) {
       throw new Error("Could not initialise shaders");
     }

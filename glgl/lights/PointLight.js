@@ -1,4 +1,5 @@
 import SceneNode from "../sceneObjects/SceneNode";
+import Color from "../math/Color";
 import Vec3 from "../math/Vec3";
 
 export default class PointLight extends SceneNode
@@ -9,10 +10,11 @@ export default class PointLight extends SceneNode
     this.isLightEmitter = true;
     this.lightType = "point";
 
-    this.diffuse = new Vec3(0.4, 0.4, 0.6);
-    this.specular = new Vec3(0.8, 0.8, 0.8);
-    this.ambient = new Vec3(0.4, 0.4, 0.6);
-    this.attenuation = new Vec3(0.1, 0.3, 0.3);
+    this.diffuse = new Color(0.4, 0.4, 0.6);
+    this.specular = new Color(0.8, 0.8, 0.8);
+    this.ambient = new Color(0.4, 0.4, 0.6);
+    this.cutoff = 20;
+    this.decay = 2;
   }
 
   getDrawCallData()
@@ -25,7 +27,8 @@ export default class PointLight extends SceneNode
           specular : this.specular,
           ambient : this.ambient,
         },
-        attenuation : this.attenuation,
+        cutoff : this.cutoff,
+        decay : this.decay,
         position : this.position,
         globalTransform : this._globalTransform
       }]

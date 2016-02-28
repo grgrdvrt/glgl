@@ -24,11 +24,13 @@ uniform Camera camera;
 varying vec3 vWorldPosition;
 varying vec3 vSurfaceNormal;
 varying vec3 vCameraPosition;
+varying vec2 vUV;
 
 vec4 origin = vec4(vec3(0.0), 1.0);
 
 void main(void)
 {
+  vUV = aUV;
   vec4 vertexWorldPosition = globalTransform * vec4(aVertexPosition, 1.0); 
   vWorldPosition = vertexWorldPosition.xyz;
   vSurfaceNormal = normalMatrix * aVertexNormal;
@@ -154,19 +156,53 @@ vec3 lights(vec3 surfacePosition, vec3 surfaceNormal, vec3 viewDir, MaterialInfo
 
 
 
+/*vec4 bump(sampler2D image, vec2 pos, vec2 dir){
+  vec3 delta = 0.01 * offset;
+  float mid = texture2D(image, pos).x;
+  float left = texture2D(image, pos + delta.xy).x;
+  float right = texture2D(image, pos + delta.zy).x;
+  float top = texture2D(image, pos + delta.yx).x;
+  float bottom = texture2D(image, pos + delta.yz).x;
+  vec3 va = normalize(vec3(size.xy, dir.x * (right - left)));
+  vec3 vb = normalize(vec3(size.yx, dir.y * (bottom - top)));
+  return vec4(cross(va, vb), mid);
+}*/
+varying vec2 vUV;
+uniform sampler2D texture;
+
+//www.thetenthplanet.de/archives/1180
+vec3 perturbNormal(vec3 normal, vec3 perturbation)
+{
+  vec3 viewDir = normalize(vWorldPosition);
+  vec3 q0 = dFdx( viewDir );
+  vec3 q1 = dFdy( viewDir );
+  vec2 st0 = dFdx( vUV );
+  vec2 st1 = dFdy( vUV );
+
+  mat3 tsn = mat3(
+    normalize(q0 * st1.t - q1 * st0.t),
+    normalize(-q0 * st1.s + q1 * st0.s),
+    normal
+  );
+
+  return normalize( tsn * (perturbation * 2.0 - 1.0) );
+
+  //return normalize(transform * perturbation);
+}
 
 void main(void)
 {
   vec3 viewDir = normalize(vCameraPosition - vWorldPosition);
-  vec3 surfaceNormal = normalize(vSurfaceNormal);
+  vec3 surfaceNormal = perturbNormal(normalize(vSurfaceNormal), texture2D(texture, vUV).rgb);
 
   vec3 lightValue = material.lightModel.ambient * ambientLight + lights(vWorldPosition, surfaceNormal, viewDir, material);
 
   gl_FragColor = vec4(lightValue * material.lightModel.diffuse, 1.0);
+  //gl_FragColor = vec4(lightValue * texture2D(texture, vUV).rgb, 1.0);
 }`;
 
 
-export default class LightMaterial
+export default class NormalMaterial
 {
   constructor(diffuse=0xeeeeee, specular=0xffffff, ambient=0x888888)
   {
@@ -189,6 +225,7 @@ export default class LightMaterial
         },
         shininess:5
       },
+      texture:this.texture
     });
     return this.drawCallData;
   }

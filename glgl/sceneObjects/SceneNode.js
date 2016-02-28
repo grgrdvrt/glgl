@@ -37,6 +37,7 @@ export default class SceneNode
       t[2], t[5], t[8], 0,
       0, 0, 0, 1
     );
+   //this._transform.identity();
     this._transform.scaleV(this.scale);
     this._transform.translateV(this.position);
     return this._transform.clone();

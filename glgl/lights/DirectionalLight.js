@@ -1,5 +1,6 @@
 import SceneNode from "../sceneObjects/SceneNode";
 import Vec3 from "../math/Vec3";
+import Color from "../math/Color";
 
 export default class DirectionalLight extends SceneNode
 {
@@ -9,9 +10,9 @@ export default class DirectionalLight extends SceneNode
     this.isLightEmitter = true;
     this.lightType = "directional";
 
-    this.diffuse = new Vec3(0.6, 0.4, 0.4);
-    this.specular = new Vec3(0.8, 0.8, 0.8);
-    this.ambient = new Vec3(0.6, 0.4, 0.4);
+    this.diffuse = new Color(0.6, 0.4, 0.4);
+    this.specular = new Color(0.8, 0.8, 0.8);
+    this.ambient = new Color(0.6, 0.4, 0.4);
     this.direction = new Vec3(0.5, 1, 1);
   }
 

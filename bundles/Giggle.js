@@ -3,13 +3,16 @@ import Context from "../glgl/core/Context";
 import LightMaterial from "../glgl/materials/LightMaterial";
 
 import Camera from "../glgl/sceneObjects/Camera";
-import Light from "../glgl/lights/Light";
+import DirectionalLight from "../glgl/lights/DirectionalLight";
+import AmbientLight from "../glgl/lights/AmbientLight";
 
 import Mesh from "../glgl/sceneObjects/Mesh";
 import Group from "../glgl/sceneObjects/Group";
 import SceneRenderer from "../glgl/sceneVisitors/SceneRenderer";
 
 import Loop from "../utils/Loop";
+
+import MouseControl from "../glgl/controllers/MouseControl";
 
 
 export default class Giggle
@@ -31,8 +34,10 @@ export default class Giggle
     this.camera.position.z = 10;
     this.scene.add(this.camera);
 
-    this.light = new Light();
-    this.scene.add(this.light);
+    this.directionalLight = new DirectionalLight();
+    this.scene.add(this.directionalLight);
+
+    this.scene.add(new AmbientLight(0x888888));
 
     this.context.viewport.resized.add((w, h) => this.camera.aspect = w / h);
 
@@ -48,6 +53,7 @@ export default class Giggle
   start(updateCallback)
   {
     this.updateCallback = updateCallback;
+    new MouseControl(this.canvas, this.camera);
     this.loop = new Loop(this.update.bind(this));
   }
 

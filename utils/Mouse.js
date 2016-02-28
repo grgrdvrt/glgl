@@ -40,13 +40,37 @@ export default class Mouse
     this.onDown = new Signal();
     this.onUp = new Signal();
     this.onMove = new Signal();
+    this.onWheel = new Signal();
 
     this._moveBind = this._onMouseMove.bind(this);
     this._downBind = this._onMouseDown.bind(this);
     this._upBind = this._onMouseUp.bind(this);
-    this.target.onmousemove = this._moveBind;
-    this.target.onmousedown = this._downBind;
-    this.target.onmouseup = this._upBind;
+    this._wheelBind = this._onMouseWheel.bind(this);
+    this._enabled = false;
+    this.enable();
+  }
+
+
+  enable()
+  {
+    if(this._enabled){
+      return;
+    }
+    this.target.addEventListener("mousemove", this._moveBind);
+    this.target.addEventListener("mousedown", this._downBind);
+    this.target.addEventListener("mouseup", this._upBind);
+    this.target.addEventListener("mousewheel", this._wheelBind);
+    this._enabled = true;
+  }
+
+
+  disable()
+  {
+    this.target.removeEventListener("mousemove", this._moveBind);
+    this.target.removeEventListener("mousedown", this._downBind);
+    this.target.removeEventListener("mouseup", this._upBind);
+    this.target.removeEventListener("mousewheel", this._wheelBind);
+    this._enabled = false;
   }
 
 
@@ -74,6 +98,18 @@ export default class Mouse
     this.isDown = false;
     this.savePos();
     this.onUp.dispatch();
+  }
+
+
+  _onMouseWheel(e)
+  {
+    let delta = 0;
+		if ( event.wheelDelta !== undefined ) {
+			delta = event.wheelDelta;
+		} else if ( event.detail !== undefined ) {
+			delta = - event.detail;
+		}
+    this.onWheel.dispatch(delta);
   }
 
 
@@ -110,15 +146,6 @@ export default class Mouse
     this.onDown.dispose();
     this.onUp.dispose();
     this.onMove.dispose();
-
-    if(this.target.onmousemove == this._moveBind) {
-      this.target.onmousemove = null;
-    }
-    if(this.target.onmousedown == this._downBind) {
-      this.target.onmousedown = null;
-    }
-    if(this.target.onmouseup == this._upBind) {
-      this.target.onmouseup = null;
-    }
+    this.disable();
   }
 }

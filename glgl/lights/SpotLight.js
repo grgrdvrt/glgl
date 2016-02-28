@@ -1,4 +1,5 @@
 import SceneNode from "../sceneObjects/SceneNode";
+import Color from "../math/Color";
 import Vec3 from "../math/Vec3";
 
 export default class SpotLight extends SceneNode
@@ -9,12 +10,14 @@ export default class SpotLight extends SceneNode
     this.isLightEmitter = true;
     this.lightType = "spot";
 
-    this.diffuse = new Vec3(1, 1, 1);
-    this.specular = new Vec3(1, 1, 1);
-    this.ambient = new Vec3(1, 1, 1);
-    this.direction = new Vec3(0.5, 1, 1);
-    this.coneAngle = Math.PI / 10;
-    this.attenuation = new Vec3(1, 0, 0);
+    this.diffuse = new Color(0.6, 0.4, 0.4);
+    this.specular = new Color(0.8, 0.8, 0.8);
+    this.ambient = new Color(0.6, 0.4, 0.4);
+    this.direction = new Color(0.5, 1, 1);
+    this.cutoff = 10;
+    this.decay = 2;
+    this.cutoffAngle = Math.PI/2;
+    this.exponent = 10;
   }
 
   getDrawCallData()
@@ -28,7 +31,10 @@ export default class SpotLight extends SceneNode
           ambient : this.ambient,
         },
         direction : this.direction,
-        coneAngle : this.coneAngle,
+        cutoff : this.cutoff,
+        decay : this.decay,
+        cutoffAngle : this.cutoffAngle,
+        exponent : this.exponent,
         attenuation : this.attenuation,
         position : this.position,
         globalTransform : this._globalTransform

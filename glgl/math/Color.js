@@ -47,9 +47,9 @@ export default class Color
 
   set hex(value)
   {
-    this.r = (value >> 16) & 0xff;
-    this.g = (value >> 8) & 0xff;
-    this.b = value & 0xff;
+    this.r = ((value >> 16) & 0xff) / 0xff;
+    this.g = ((value >> 8) & 0xff) / 0xff;
+    this.b = (value & 0xff) / 0xff;
   }
 
 
@@ -61,8 +61,8 @@ export default class Color
 
 
   get x(){ return this.r; }
-  get y(){ return this.b; }
-  get z(){ return this.g; }
+  get y(){ return this.g; }
+  get z(){ return this.b; }
 
   valueOf(){ return this; }
 

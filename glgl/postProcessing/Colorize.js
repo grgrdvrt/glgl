@@ -1,30 +1,33 @@
 import DrawCallData from "../core/DrawCallData";
 import Pass from "./Pass";
+import Color from "../math/Color";
 
 
 let fragmentSrc = `precision mediump float;
 
 uniform vec2 uFrameSize;
-uniform float saturation;
+uniform vec3 color;
+uniform float quantity;
 uniform sampler2D uTexture;
 
 varying vec2 vUV;
 
 void main(void)
 {
-	vec3 color = texture2D( uTexture, vUV).rgb;
-  gl_FragColor = vec4(mix(color, vec3(1.0, 0.0, 0.0), saturation), 1.0);
+	vec3 baseColor = texture2D( uTexture, vUV).rgb;
+  gl_FragColor = vec4(mix(baseColor, color, quantity), 1.0);
 }`;
 
 
 
 
-export default class Redate extends Pass
+export default class Colorize extends Pass
 {
-  constructor(saturation)
+  constructor(color, quantity)
   {
     super();
-    this.saturation = saturation;
+    this.color = new Color(color);
+    this.quantity = quantity;
     this.fragmentSrc = fragmentSrc;
   }
 
@@ -32,7 +35,8 @@ export default class Redate extends Pass
   exec(input, target)
   {
     this.drawCallData.setUniforms({
-      saturation:this.saturation
+      color:this.color,
+      quantity:this.quantity
     });
     super.exec(input, target);
   }

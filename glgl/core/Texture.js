@@ -1,3 +1,5 @@
+import consts from "./consts";
+
 export default class Texture 
 {
   constructor(image)
@@ -21,30 +23,30 @@ export default class Texture
     this.glContext = gl;
     this.glTexture = gl.createTexture();
 
-    gl.activeTexture(gl.TEXTURE0 + this.textureId);
-    gl.bindTexture(gl.TEXTURE_2D, this.glTexture);
+    gl.activeTexture(consts.TEXTURE0 + this.textureId);
+    gl.bindTexture(consts.TEXTURE_2D, this.glTexture);
 
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-    //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(consts.TEXTURE_2D, consts.TEXTURE_MAG_FILTER, consts.LINEAR);
+    gl.texParameteri(consts.TEXTURE_2D, consts.TEXTURE_MIN_FILTER, consts.LINEAR);
+    //gl.texParameteri(consts.TEXTURE_2D, consts.TEXTURE_MAG_FILTER, consts.NEAREST);
+    //gl.texParameteri(consts.TEXTURE_2D, consts.TEXTURE_MIN_FILTER, consts.NEAREST);
 
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-    //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.texParameteri(consts.TEXTURE_2D, consts.TEXTURE_WRAP_S, consts.CLAMP_TO_EDGE);
+    gl.texParameteri(consts.TEXTURE_2D, consts.TEXTURE_WRAP_T, consts.CLAMP_TO_EDGE);
+    //gl.texParameteri(consts.TEXTURE_2D, consts.TEXTURE_WRAP_S, consts.REPEAT);
+    //gl.texParameteri(consts.TEXTURE_2D, consts.TEXTURE_WRAP_T, consts.REPEAT);
+    gl.bindTexture(consts.TEXTURE_2D, null);
     this.isInit = true;
   }
 
 
   updateGL(gl)
   {
-    gl.activeTexture(gl.TEXTURE0 + this.textureId);
-    gl.bindTexture(gl.TEXTURE_2D, this.glTexture);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this._image);
-    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.activeTexture(consts.TEXTURE0 + this.textureId);
+    gl.bindTexture(consts.TEXTURE_2D, this.glTexture);
+    gl.pixelStorei(consts.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(consts.TEXTURE_2D, 0, consts.RGBA, consts.RGBA, consts.UNSIGNED_BYTE, this._image);
+    gl.bindTexture(consts.TEXTURE_2D, null);
     this.needsUpdate = false;
   }
 
