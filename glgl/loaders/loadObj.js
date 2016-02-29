@@ -67,6 +67,8 @@ let patterns = [
     }
   },
   {
+    //all the "f" patterns should be match in one shot : 
+    //pattern:/^f\s+(\S+)(\/(\S+)?(\/(\S+))?)?\s+(\S+)(\/(\S+)?(\/(\S+))?)?\s+(\S+)(\/(\S+)?(\/(\S+))?)?/,
     pattern:/^f\s+(\S+)\/(\S+)\/(\S+)\s+(\S+)\/(\S+)\/(\S+)\s+(\S+)\/(\S+)\/(\S+)/,
     func : (result, object) => {
       if(object === undefined){
@@ -75,18 +77,18 @@ let patterns = [
       object.triangles.push({
         a:{
           pos:Number(result[1]) - 1,
-          norm:Number(result[2]) - 1,
-          uv:Number(result[3]) - 1
+          uv:Number(result[2]) - 1,
+          norm:Number(result[3]) - 1
         },
         b:{
           pos:Number(result[4]) - 1,
-          norm:Number(result[5]) - 1,
-          uv:Number(result[6]) - 1
+          uv:Number(result[5]) - 1,
+          norm:Number(result[6]) - 1
         },
         c:{
           pos:Number(result[7]) - 1,
-          norm:Number(result[8]) - 1,
-          uv:Number(result[9]) - 1
+          uv:Number(result[8]) - 1,
+          norm:Number(result[9]) - 1
         },
       });
       return object;
@@ -101,15 +103,15 @@ let patterns = [
       object.triangles.push({
         a:{
           pos:Number(result[1]) - 1,
-          norm:Number(result[2]) - 1
+          uv:Number(result[2]) - 1
         },
         b:{
           pos:Number(result[3]) - 1,
-          norm:Number(result[4]) - 1
+          uv:Number(result[4]) - 1
         },
         c:{
           pos:Number(result[5]) - 1,
-          norm:Number(result[6]) - 1
+          uv:Number(result[6]) - 1
         },
       });
       return object;
@@ -124,15 +126,15 @@ let patterns = [
       object.triangles.push({
         a:{
           pos:Number(result[1]) - 1,
-          uv:Number(result[3]) - 1
+          norm:Number(result[3]) - 1
         },
         b:{
           pos:Number(result[4]) - 1,
-          uv:Number(result[6]) - 1
+          norm:Number(result[6]) - 1
         },
         c:{
           pos:Number(result[7]) - 1,
-          uv:Number(result[9]) - 1
+          norm:Number(result[9]) - 1
         },
       });
       return object;
@@ -242,7 +244,7 @@ function buildGeometry(object)
   return new Geometry({
     aVertexPosition:positions,
     aVertexNormal:normals,
-    //aUV:uvs,
+    aUV:uvs,
   }, ids);
 }
 
@@ -255,9 +257,10 @@ function parse(response)
   let lines = response.split("\n");
   let objects = [];
   let object;
-  for(let i = 0, ii = lines.length; i < ii; i++){
+  for(let i = 0, nLines = lines.length; i < nLines; i++){
     let line = lines[i].trim();
-    patterns.forEach(p => {
+    for(let j = 0, nPatterns = patterns.length; j < nPatterns; j++){
+      let p = patterns[j];
       let result = p.pattern.exec(line);
       if(result !== null) {
         let newObject = p.func(result, object);
@@ -265,8 +268,9 @@ function parse(response)
           objects.push(newObject);
           object = newObject;
         }
+        break;
       }
-    });
+    }
   }
 
   return objects.map(buildGeometry);
