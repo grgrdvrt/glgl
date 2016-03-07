@@ -10,6 +10,8 @@ export default class DrawCall
     this.ids = undefined;
     this.program = undefined;
     this.drawMethod = consts.TRIANGLES;
+    this.cullingMode = consts.BACK;
+    this.enableCulling = true;
     this.defines = {};
 
     this.addData(drawCallDatas);
@@ -29,13 +31,23 @@ export default class DrawCall
       return arr;
     }
 
+    let setIfDefined = (dData, name) => {
+      if(dData[name] !== undefined){
+        this[name] = dData[name];
+      }
+    };
+
     var arr = flatten([], drawCallDatas);
     for(let i = 0, n = arr.length; i < n; i++){
       let dData = arr[i];
       this.drawCallDatas.push(dData);
-      for(let k in dData.params) {
-        this[k] = dData.params[k];
-      }
+
+      setIfDefined(dData, "program");
+      setIfDefined(dData, "ids");
+      setIfDefined(dData, "drawMethod");
+      setIfDefined(dData, "cullingMode");
+      setIfDefined(dData, "enableCulling");
+
       for(let k in dData.defines) {
         this.defines[k] = dData.defines[k];
       }
@@ -141,7 +153,7 @@ export default class DrawCall
   }
 
 
-  exec(context, target)
+  exec(context, target, viewport)
   {
     var gl = context.glContext;
 
@@ -150,10 +162,17 @@ export default class DrawCall
     }
 
     if(!target.isInit) {
-      target.initGL(gl);
+     target.initGL(gl);
     }
     gl.bindFramebuffer(gl.FRAMEBUFFER, target.glFrameBuffer);
-    gl.viewport(0, 0, target.viewport.width, target.viewport.height);
+
+    if(viewport !== undefined){
+      gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
+    }
+    else {
+      gl.viewport(0, 0, target.width, target.height);
+    }
+
 
     this.program.setDefines(this.defines);
     if(!this.program.isInit) {
@@ -164,6 +183,15 @@ export default class DrawCall
 
     this._setAttributes(gl);
     this._setUniforms(gl);
+
+
+    if(this.enableCulling){
+      gl.enable(consts.CULL_FACE);
+      gl.cullFace(this.cullingMode);
+    }
+    else {
+      gl.disable(consts.CULL_FACE);
+    }
 
     if(this.ids === undefined) {
       var attributesCount = 0;
@@ -177,10 +205,10 @@ export default class DrawCall
       if(this.ids.needsUpdate) {
         this.ids.updateGL(gl);
       }
+
       gl.bindBuffer(consts.ELEMENT_ARRAY_BUFFER, this.ids.buffer);
       gl.drawElements(this.drawMethod, this.ids.count, this.ids.type, 0);
     }
-
 
   }
 }

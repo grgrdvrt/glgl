@@ -74,7 +74,8 @@ import {
   Camera,
   Group,
   Mesh,
-  SceneNode
+  SceneNode,
+  Basis
 } from "./sceneObjects/";
 
 import {
@@ -147,6 +148,7 @@ export default {
   Group,
   Mesh,
   SceneNode,
+  Basis,
 
   DrawCallsVisitor,
   LightsVisitor,

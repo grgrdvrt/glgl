@@ -16,7 +16,7 @@ export default class MouseControl
 
     this.radius = this.camera.position.length;
 
-    this.speed = 0.001;
+    this.speed = -0.001;
     this.velocity = new Vec2();
     this.friction = 0.9;
     this.lastMousePos = new Vec2();

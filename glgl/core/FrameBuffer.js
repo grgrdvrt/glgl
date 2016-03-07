@@ -1,11 +1,12 @@
 import RttTexture from "./RttTexture";
-import Viewport from "./Viewport";
+import DrawCallData from "./DrawCallData";
+import Vec2 from "../math/Vec2";
 
 export default class FrameBuffer
 {
   constructor (width, height)
   {
-    this.viewport = new Viewport();
+    this.frameSize = new Vec2();
     this.texture = new RttTexture(this);
     this.resize(width, height);
     this.isInit = false;
@@ -20,13 +21,12 @@ export default class FrameBuffer
     this.glFrameBuffer = gl.createFramebuffer();
 
     this.texture.initGL(gl);
-    this.viewport.initGL(gl);
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.glFrameBuffer);
 
     this.renderBuffer = gl.createRenderbuffer();
     gl.bindRenderbuffer(gl.RENDERBUFFER, this.renderBuffer);
-    gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, this.width, this.height);
+    gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, this.frameSize.x, this.frameSize.y);
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.glFrameBuffer);
     gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this.renderBuffer);
 
@@ -38,39 +38,53 @@ export default class FrameBuffer
   }
 
 
-  clear()
-  {
-    if(this.glContext === undefined){
-      return;
-    }
-    var gl = this.glContext;
-    gl.bindFramebuffer(gl.FRAMEBUFFER, this.glFrameBuffer);
-    this.viewport.clear();
-  }
-
-
   resize(w, h)
   {
-    if(this.viewport.width === undefined){
-      this.viewport.resize(w, h);
-    }
-    else {
-      this.viewport.resize(
-        w * this.viewport.width / this.width,
-        h * this.viewport.height / this.height
-      );
-    }
-    this.width = w;
-    this.height = h;
+    this.frameSize.set(w, h);
     this.texture.resize(w, h);
   }
 
+
+  get width() { return this.frameSize.x; }
+
+  set width(value)
+  {
+    this.resize(value, this.frameSize.y);
+  }
+
+
+  get height() { return this.frameSize.y; }
+
+  set height(value)
+  {
+    this.resize(this.frameSize.x, value);
+  }
+
+
+  clear()
+  {
+    var gl = this.glContext;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.enable(consts.DEPTH_TEST);
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clear(consts.COLOR_BUFFER_BIT | consts.DEPTH_BUFFER_BIT);
+  }
+
+
+  getDrawCallData()
+  {
+    this.drawCallData.setUniforms({
+      "uFrameSize":this.frameSize
+    });
+    return this.drawCallData;
+  }
 
 
   dispose()
   {
     //TODO
   }
+
 
   toString()
   {

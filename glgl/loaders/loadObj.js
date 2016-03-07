@@ -17,6 +17,19 @@ function createObject(name){
     triangles:[]
   };
 }
+
+function readVertex (v) {
+  let items = v.split("/");
+  let pos = items[0];
+  let uv = items[1] === undefined ? pos : items[1];
+  let norm = items[2] === undefined ? pos : items[2];
+  return {
+    pos:Number(pos) - 1,
+    uv:Number(uv) - 1,
+    norm:Number(norm) - 1
+  };
+}
+
 let patterns = [
   {
     pattern:/^o|g\s+(\S*)/g,
@@ -67,89 +80,15 @@ let patterns = [
     }
   },
   {
-    //all the "f" patterns should be match in one shot : 
-    //pattern:/^f\s+(\S+)(\/(\S+)?(\/(\S+))?)?\s+(\S+)(\/(\S+)?(\/(\S+))?)?\s+(\S+)(\/(\S+)?(\/(\S+))?)?/,
-    pattern:/^f\s+(\S+)\/(\S+)\/(\S+)\s+(\S+)\/(\S+)\/(\S+)\s+(\S+)\/(\S+)\/(\S+)/,
-    func : (result, object) => {
-      if(object === undefined){
-        object = createObject("");
-      }
-      object.triangles.push({
-        a:{
-          pos:Number(result[1]) - 1,
-          uv:Number(result[2]) - 1,
-          norm:Number(result[3]) - 1
-        },
-        b:{
-          pos:Number(result[4]) - 1,
-          uv:Number(result[5]) - 1,
-          norm:Number(result[6]) - 1
-        },
-        c:{
-          pos:Number(result[7]) - 1,
-          uv:Number(result[8]) - 1,
-          norm:Number(result[9]) - 1
-        },
-      });
-      return object;
-    }
-  },
-  {
-    pattern:/^f\s+(\S+)\/(\S+)\s+(\S+)\/(\S+)\s+(\S+)\/(\S+)/,
-    func : (result, object) => {
-      if(object === undefined){
-        object = createObject("");
-      }
-      object.triangles.push({
-        a:{
-          pos:Number(result[1]) - 1,
-          uv:Number(result[2]) - 1
-        },
-        b:{
-          pos:Number(result[3]) - 1,
-          uv:Number(result[4]) - 1
-        },
-        c:{
-          pos:Number(result[5]) - 1,
-          uv:Number(result[6]) - 1
-        },
-      });
-      return object;
-    }
-  },
-  {
-    pattern:/^f\s+(\S+)\/\/(\S+)\s+(\S+)\/\/(\S+)\s+(\S+)\/\/(\S+)/,
-    func : (result, object) => {
-      if(object === undefined){
-        object = createObject("");
-      }
-      object.triangles.push({
-        a:{
-          pos:Number(result[1]) - 1,
-          norm:Number(result[3]) - 1
-        },
-        b:{
-          pos:Number(result[4]) - 1,
-          norm:Number(result[6]) - 1
-        },
-        c:{
-          pos:Number(result[7]) - 1,
-          norm:Number(result[9]) - 1
-        },
-      });
-      return object;
-    }
-  },
-  {
     pattern:/^f\s+(\S+)\s+(\S+)\s+(\S+)/,
     func : (result, object) => {
       if(object === undefined){
         object = createObject("");
       }
       object.triangles.push({
-        a:{pos:Number(result[1]) - 1},
-        b:{pos:Number(result[2]) - 1},
-        c:{pos:Number(result[3]) - 1}
+        a:readVertex(result[1]),
+        b:readVertex(result[3]),
+        c:readVertex(result[2]),
       });
       return object;
     }
@@ -236,7 +175,6 @@ function buildGeometry(object)
   }
 
 
-  normals = [];
   if(normals.length <= 0){
     normals = computeVertexNormals(positions, ids);
   }

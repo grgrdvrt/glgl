@@ -8,16 +8,16 @@ export default function mergeGeometries(geometries, additionalNames = []){
   let mergeIds = () => {
 
     let bufferLength = datas.reduce((n, data) => {
-      if(data.params.ids === undefined) {
+      if(data.ids === undefined) {
         //TODO support geometries without ids
         throw new Error("geometries without not supported yet");
       }
-      return n + data.params.ids.data.length;
+      return n + data.ids.data.length;
     }, 0);
     let resultBuffer = new Uint32Array(bufferLength);
 
     datas.reduce((result, data) => {
-      let buffer = data.params.ids.data;
+      let buffer = data.ids.data;
       let n = buffer.length;
       for(let i = 0; i < n; i++){
         result.buffer[result.indexBegin + i] = result.positionBegin + buffer[i];

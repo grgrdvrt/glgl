@@ -6,7 +6,7 @@ export default class ShaderMaterial
   constructor(vertexSrc, fragmentSrc)
   {
     this.drawCallData = new DrawCallData();
-    this.drawCallData.params.program = new Program(vertexSrc, fragmentSrc);
+    this.drawCallData.program = new Program(vertexSrc, fragmentSrc);
   }
 
 

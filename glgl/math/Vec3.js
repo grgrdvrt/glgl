@@ -141,6 +141,7 @@ Vec3.distance = function(v0, v1)
   );
 };
 
+Vec3.origin = new Vec3(0, 0, 0);
 Vec3.X = new Vec3(1, 0, 0);
 Vec3.Y = new Vec3(0, 1, 0);
 Vec3.Z = new Vec3(0, 0, 1);

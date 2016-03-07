@@ -23,7 +23,6 @@ export default class Mat4
   }
 
 
-
   identity()
   {
     return this.set(
@@ -67,50 +66,6 @@ export default class Mat4
       t[2], t[6], t[10], t[14],
       t[3], t[7], t[11], t[15]
     );
-    return this;
-  }
-
-  multiplyMat3(m)
-  {
-    let t = m.data;
-    this.multiply3(
-      t[0], t[3], t[6],
-      t[1], t[4], t[7],
-      t[2], t[5], t[8]
-    );
-    return this;
-  }
-
-
-  multiply3(a, b, c, d, e, f, g, h, i)
-  {
-    let t = this.data;
-    let t0 = t[0], t4 = t[4], t8 = t[8], t12 = t[12];
-    let t1 = t[1], t5 = t[5], t9 = t[9], t13 = t[13];
-    let t2 = t[2], t6 = t[6], t10 = t[10], t14 = t[14];
-    let t3 = t[3], t7 = t[7], t11 = t[11], t15 = t[15];
-
-
-    t[0] = a * t0 + b * t1 + c * t2 + d * t3;
-    t[1] = e * t0 + f * t1 + g * t2 + h * t3;
-    t[2] = i * t0;
-    t[3] = t3;
-
-    t[4] = a * t4 + b * t5 + c * t6 + d * t7;
-    t[5] = e * t4 + f * t5 + g * t6 + h * t7;
-    t[6] = i * t4;
-    t[7] = t7;
-
-    t[8] = a * t8 + b * t9 + c * t10 + d * t11;
-    t[9] = e * t8 + f * t9 + g * t10 + h * t11;
-    t[10] = i * t8;
-    t[11] = t11;
-
-    t[12] = a * t12 + b * t13 + c * t14 + d * t15;
-    t[13] = e * t12 + f * t13 + g * t14 + h * t15;
-    t[14] = i * t12;
-    t[15] = t15;
-
     return this;
   }
 
@@ -187,31 +142,33 @@ export default class Mat4
     let m = t[3], n = t[7], o = t[11], p = t[15];
 
     t[0]  = g*l*n - h*k*n + h*j*o - f*l*o - g*j*p + f*k*p;
-    t[4]  = d*k*n - c*l*n - d*j*o + b*l*o + c*j*p - b*k*p;
-    t[8]  = c*h*n - d*g*n + d*f*o - b*h*o - c*f*p + b*g*p;
-    t[12] = d*g*j - c*h*j - d*f*k + b*h*k + c*f*l - b*g*l;
     t[1]  = h*k*m - g*l*m - h*i*o + e*l*o + g*i*p - e*k*p;
-    t[5]  = c*l*m - d*k*m + d*i*o - a*l*o - c*i*p + a*k*p;
-    t[9]  = d*g*m - c*h*m - d*e*o + a*h*o + c*e*p - a*g*p;
-    t[13] = c*h*i - d*g*i + d*e*k - a*h*k - c*e*l + a*g*l;
     t[2]  = f*l*m - h*j*m + h*i*n - e*l*n - f*i*p + e*j*p;
-    t[6]  = d*j*m - b*l*m - d*i*n + a*l*n + b*i*p - a*j*p;
-    t[10] = b*h*m - d*f*m + d*e*n - a*h*n - b*e*p + a*f*p;
-    t[14] = d*f*i - b*h*i - d*e*j + a*h*j + b*e*l - a*f*l;
     t[3]  = g*j*m - f*k*m - g*i*n + e*k*n + f*i*o - e*j*o;
+    t[4]  = d*k*n - c*l*n - d*j*o + b*l*o + c*j*p - b*k*p;
+    t[5]  = c*l*m - d*k*m + d*i*o - a*l*o - c*i*p + a*k*p;
+    t[6]  = d*j*m - b*l*m - d*i*n + a*l*n + b*i*p - a*j*p;
     t[7]  = b*k*m - c*j*m + c*i*n - a*k*n - b*i*o + a*j*o;
+    t[8]  = c*h*n - d*g*n + d*f*o - b*h*o - c*f*p + b*g*p;
+    t[9]  = d*g*m - c*h*m - d*e*o + a*h*o + c*e*p - a*g*p;
+    t[10] = b*h*m - d*f*m + d*e*n - a*h*n - b*e*p + a*f*p;
     t[11] = c*f*m - b*g*m - c*e*n + a*g*n + b*e*o - a*f*o;
+    t[12] = d*g*j - c*h*j - d*f*k + b*h*k + c*f*l - b*g*l;
+    t[13] = c*h*i - d*g*i + d*e*k - a*h*k - c*e*l + a*g*l;
+    t[14] = d*f*i - b*h*i - d*e*j + a*h*j + b*e*l - a*f*l;
     t[15] = b*g*i - c*f*i + c*e*j - a*g*j - b*e*k + a*f*k;
 
     let det = a * t[0] + e * t[4] + i * t[8] + m * t[12];
+    //shouldn't it be :
+    //let det = a * t[0] + b * t[4] + c * t[8] + d * t[12];
     if(det === 0){
       console.warn("Matrix can't be inverted :\n" + this.toString());
       this.identity();
     }
     else {
-      let s = 1 / det;
+      let iDet = 1 / det;
       for(let i = 0; i < 16; i++){
-        t[i] *= s;
+        t[i] *= iDet;
       }
     }
 
@@ -266,9 +223,6 @@ export default class Mat4
   }
 }
 
-const mat3 = new Mat3();
-const mat4 = new Mat4();
-
 
 Mat4.projection = function(fov, aspect, near, far, out)
 {
@@ -282,8 +236,8 @@ Mat4.projection = function(fov, aspect, near, far, out)
   t[0] = d / aspect;
   t[5] = d;
   t[10] = (near + far) * inf;
-  t[11] = 2 * near * far * inf;
-  t[14] = -1;
+  t[14] = 2 * near * far * inf;
+  t[11] = -1;
   t[1] = t[2] = t[3] = t[4] = t[6] = t[7] = t[8] = t[9] = t[12] = t[13] = t[15] = 0;
   return out;
 };

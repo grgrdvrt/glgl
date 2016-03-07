@@ -35,7 +35,6 @@ export default class SpotLight extends SceneNode
         decay : this.decay,
         cutoffAngle : this.cutoffAngle,
         exponent : this.exponent,
-        attenuation : this.attenuation,
         position : this.position,
         globalTransform : this._globalTransform
       }]

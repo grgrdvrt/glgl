@@ -207,7 +207,7 @@ export default class NormalMaterial
   constructor(diffuse=0xeeeeee, specular=0xffffff, ambient=0x888888)
   {
     this.drawCallData = new DrawCallData();
-    this.drawCallData.params.program = new Program(vertex, fragment);
+    this.drawCallData.program = new Program(vertex, fragment);
 
     this.diffuse = new Color(diffuse);
     this.specular = new Color(specular);

@@ -62,12 +62,12 @@ export default class SphereGeometry
       let nextVertexID = row * nx + ((col + 1) % nx);
 
       ids[id] = i;
-      ids[id + 1] = nextVertexID;
-      ids[id + 2] = nextVertexID + nx;
+      ids[id + 1] = nextVertexID + nx;
+      ids[id + 2] = nextVertexID;
 
       ids[id + 3] = i;
-      ids[id + 4] = nextVertexID + nx;
-      ids[id + 5] = i + nx;
+      ids[id + 4] = i + nx;
+      ids[id + 5] = nextVertexID + nx;
     }
 
     this.drawCallData.setIds(ids);

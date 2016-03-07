@@ -1,5 +1,5 @@
 import consts from "./consts";
-import Viewport from "./Viewport";
+import DrawCallData from "./DrawCallData";
 import Vec2 from "../math/Vec2";
 import Signal from "../../utils/Signal";
 
@@ -9,7 +9,8 @@ export default class Context
   {
     this.canvas = canvas;
 
-    this.viewport = new Viewport();
+    this.drawCallData = new DrawCallData();
+    this.frameSize = new Vec2();
 
     this._checkSizeBind = this.checkSize.bind(this);
     this.resized = new Signal();
@@ -23,7 +24,6 @@ export default class Context
     //console.log(this.glContext.getSupportedExtensions().join("\n"));
     //console.log(this.glContext);
 
-    this.viewport.initGL(this.glContext);
     this.clear();
 
     this.isInit = true;
@@ -59,21 +59,26 @@ export default class Context
 
   resize(w, h)
   {
-    /*if(this.viewport.width === undefined){
-      this.viewport.resize(w, h);
-    }
-    else {
-      this.viewport.resize(
-        w * this.viewport.width / this.width,
-        h * this.viewport.height / this.height
-      );
-    }*/
-    this.viewport.resize(w, h);
-    this.width = w;
-    this.height = h;
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
-    this.resized.dispatch(this.width, this.height);
+    this.frameSize.set(w, h);
+    this.canvas.width = this.frameSize.x;
+    this.canvas.height = this.frameSize.y;
+    this.resized.dispatch(this.frameSize.x, this.frameSize.y);
+  }
+
+
+  get width() { return this.frameSize.x; }
+
+  set width(value)
+  {
+    this.resize(value, this.frameSize.y);
+  }
+
+
+  get height() { return this.frameSize.y; }
+
+  set height(value)
+  {
+    this.resize(this.frameSize.x, value);
   }
 
 
@@ -81,6 +86,17 @@ export default class Context
   {
     var gl = this.glContext;
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    this.viewport.clear();
+    gl.enable(consts.DEPTH_TEST);
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clear(consts.COLOR_BUFFER_BIT | consts.DEPTH_BUFFER_BIT);
+  }
+
+
+  getDrawCallData()
+  {
+    this.drawCallData.setUniforms({
+      "uFrameSize":this.frameSize
+    });
+    return this.drawCallData;
   }
 }

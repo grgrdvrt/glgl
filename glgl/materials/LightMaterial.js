@@ -1,4 +1,5 @@
 import Program from "../core/Program";
+import consts from "../core/consts";
 import DrawCallData from "../core/DrawCallData";
 import Color from "../math/Color";
 
@@ -39,7 +40,6 @@ void main(void)
 
 
 var fragment = `
-
 
 #extension GL_OES_standard_derivatives : enable
 precision mediump float;
@@ -112,7 +112,7 @@ vec3 phong(vec3 surfaceNormal, vec3 viewDir, vec3 lightVector, LightModel lightM
   float facing = 2.0 * float(gl_FrontFacing) - 1.0;
   vec3 lightReflect = reflect(lightVector, facing * surfaceNormal);
   LightModel mLightModel = material.lightModel;
-  float diffuseDot = max(facing * dot(lightVector, surfaceNormal), 0.0);
+  float diffuseDot = max(dot(lightVector, facing * surfaceNormal), 0.0);
   vec3 t1 = mLightModel.diffuse * diffuseDot * lightModel.diffuse;
   vec3 t2 = step(0.0, diffuseDot) * mLightModel.specular * pow(max(dot(lightReflect, -viewDir), 0.0), material.shininess) * lightModel.specular;
   return t1 + t2;
@@ -163,6 +163,7 @@ void main(void)
   vec3 lightValue = material.lightModel.ambient * ambientLight + lights(vWorldPosition, surfaceNormal, viewDir, material);
 
   gl_FragColor = vec4(lightValue * material.lightModel.diffuse, 1.0);
+  //gl_FragColor = vec4(lightValue * material.lightModel.diffuse, -float(gl_FrontFacing));
 }`;
 
 
@@ -171,7 +172,7 @@ export default class LightMaterial
   constructor(diffuse=0xeeeeee, specular=0xffffff, ambient=0x888888)
   {
     this.drawCallData = new DrawCallData();
-    this.drawCallData.params.program = new Program(vertex, fragment);
+    this.drawCallData.program = new Program(vertex, fragment);
 
     this.diffuse = new Color(diffuse);
     this.specular = new Color(specular);
@@ -191,5 +192,15 @@ export default class LightMaterial
       },
     });
     return this.drawCallData;
+  }
+
+  set doubleFace(value)
+  {
+    this.drawCallData.enableCulling = !value;
+  }
+
+  get doubleFace()
+  {
+    return this.drawCallData.enableCulling === false;
   }
 }

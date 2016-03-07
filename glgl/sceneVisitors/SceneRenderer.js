@@ -25,6 +25,11 @@ export default class SceneRenderer
     if(target === undefined){
       target = this.context;
     }
+
+    if(camera.parent === undefined){
+      console.warn("camera not attached to node, camera transform can't be computed");
+    }
+
     if(target.autoClear){
       target.clear();
     }
@@ -48,7 +53,7 @@ export default class SceneRenderer
       drawCall.addData([
         this.drawCallData,
         lightsResult.drawCallData,
-        target.viewport.getDrawCallData(),
+        target.getDrawCallData(),
         camera.getDrawCallData()
       ]);
       drawCall.exec(this.context, target);

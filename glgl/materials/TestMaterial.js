@@ -75,7 +75,7 @@ export default class TestMaterial
   constructor()
   {
     this.drawCallData = new DrawCallData();
-    this.drawCallData.params.program = new Program(vertex, fragment);
+    this.drawCallData.program = new Program(vertex, fragment);
     this.texture = undefined;
     this.texture2 = undefined;
   }

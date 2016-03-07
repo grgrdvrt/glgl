@@ -16,6 +16,7 @@ export default class Mesh extends SceneNode
   get normalMatrix()
   {
     var t = this._globalTransform.data;
+
     this._normalMatrix.set(
       t[0], t[4], t[8],
       t[1], t[5], t[9],

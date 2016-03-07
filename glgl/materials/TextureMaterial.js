@@ -46,7 +46,7 @@ export default class TextureMaterial
   constructor()
   {
     this.drawCallData = new DrawCallData();
-    this.drawCallData.params.program = new Program(vertex, fragment);
+    this.drawCallData.program = new Program(vertex, fragment);
 
   }
 

@@ -23,7 +23,7 @@ export default class Camera extends SceneNode
   computeProjectionMatrix()
   {
     Mat4.projection(
-      this._fov,
+      this._fov * Math.PI / 180,
       this._aspect,
       this._near,
       this._far,

@@ -52,7 +52,7 @@ export default class Pass
     this.context = context;
 
     let program = new Program(this.vertexSrc, this.fragmentSrc);
-    this.drawCallData.params.program = program;
+    this.drawCallData.program = program;
     this.isInit = true;
   }
 

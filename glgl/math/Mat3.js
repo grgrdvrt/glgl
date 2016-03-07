@@ -47,12 +47,11 @@ export default class Mat3
   }
 
 
-  copy(mat){
-    var t0 = this.data;
-    var t1 = mat.data;
-    t0[0] = t1[0]; t0[3] = t1[3]; t0[6] = t1[6];
-    t0[1] = t1[1]; t0[4] = t1[4]; t0[7] = t1[7];
-    t0[2] = t1[2]; t0[5] = t1[5]; t0[8] = t1[8];
+  copy(mat)
+  {
+    for(var i = 0; i < 9; i++){
+      this.data[i] = mat.data[i];
+    }
     return this;
   }
 
@@ -163,17 +162,17 @@ export default class Mat3
     var t = this.data;
 
     var iDet = 1 / det;
-     return this.set(
-       (t[4] * t[8] - t[5] * t[7])  *  iDet,
-       (t[5] * t[6] - t[3] * t[8])  *  iDet,
-       (t[3] * t[7] - t[4] * t[6])  *  iDet,
-       (t[2] * t[7] - t[1] * t[8])  *  iDet,
-       (t[0] * t[8] - t[2] * t[6])  *  iDet,
-       (t[1] * t[6] - t[0] * t[7])  *  iDet,
-       (t[1] * t[5] - t[2] * t[4])  *  iDet,
-       (t[2] * t[3] - t[0] * t[5])  *  iDet,
-       (t[0] * t[4] - t[1] * t[3])  *  iDet
-     );
+    return this.set(
+      (t[4] * t[8] - t[5] * t[7])  *  iDet,
+      (t[5] * t[6] - t[3] * t[8])  *  iDet,
+      (t[3] * t[7] - t[4] * t[6])  *  iDet,
+      (t[2] * t[7] - t[1] * t[8])  *  iDet,
+      (t[0] * t[8] - t[2] * t[6])  *  iDet,
+      (t[1] * t[6] - t[0] * t[7])  *  iDet,
+      (t[1] * t[5] - t[2] * t[4])  *  iDet,
+      (t[2] * t[3] - t[0] * t[5])  *  iDet,
+      (t[0] * t[4] - t[1] * t[3])  *  iDet
+    );
   }
 
 
@@ -188,6 +187,7 @@ export default class Mat3
   }
 
 
+  //TODO : check maths
   lookAt(position, target, up)
   {
     tz.copy(target).sub(position).normalize();
@@ -214,10 +214,8 @@ export default class Mat3
   clone()
   {
     var cloneMat = new Mat3();
-    var t0 = this.data;
-    var t1 = cloneMat.data;
     for(var i = 0; i < 9; i++) {
-      t1[i] = t0[i];
+      cloneMat.data[i] = this.data[i];
     }
     return cloneMat;
   }

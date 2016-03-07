@@ -59,7 +59,7 @@ export default class FragmentToy
 
   setSource(fragment)
   {
-    this.drawCallData.params.program = new Program(vertex, fragment);
+    this.drawCallData.program = new Program(vertex, fragment);
   }
 
 

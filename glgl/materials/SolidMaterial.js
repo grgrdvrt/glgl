@@ -43,7 +43,7 @@ export default class SolidMaterial
   constructor(color)
   {
     this.drawCallData = new DrawCallData();
-    this.drawCallData.params.program = new Program(vertex, fragment);
+    this.drawCallData.program = new Program(vertex, fragment);
 
     this.color = new Color(color);
   }

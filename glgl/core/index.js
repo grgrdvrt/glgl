@@ -11,7 +11,6 @@ import Program from "./Program";
 import RttTexture from "./RttTexture";
 import Texture from "./Texture";
 import UniformInput from "./UniformInput";
-import Viewport from "./Viewport";
 
 export default {
   AttributeBuffer,
@@ -27,5 +26,4 @@ export default {
   RttTexture,
   Texture,
   UniformInput,
-  Viewport
 };

@@ -1,29 +1,39 @@
 import IdsAttribute from "./IdsAttribute";
+import consts from "./consts";
 import AttributeBuffer from "./AttributeBuffer";
 
 export default class DrawCallData
 {
-  constructor(attributes, uniforms)
+  constructor(attributes, uniforms, ids)
   {
-    this.params = {};
     this.defines = {};
     this.attributes = {};
     this.uniforms = {};
-    if(attributes !== undefined){
+
+    if(attributes){
       this.setAttributes(attributes);
     }
-    if(uniforms !== undefined){
+    if(uniforms){
       this.setUniforms(uniforms);
     }
+    if(ids){
+      this.setIds(ids);
+    }
+
+    this.ids = undefined;
+    this.enableCulling = undefined;
+    this.cullingMode = undefined;
+    this.drawMethod = undefined;
+    this.program = undefined;
   }
 
 
   setIds(data)
   {
-    if(this.params.ids === undefined){
-      this.params.ids = new IdsAttribute();
+    if(this.ids === undefined){
+      this.ids = new IdsAttribute();
     }
-    this.params.ids.setData(data);
+    this.ids.setData(data);
   }
 
 
@@ -44,5 +54,29 @@ export default class DrawCallData
     for(let name in data){
       this.uniforms[name] = data[name];
     }
+  }
+
+
+  clearCache(...names)
+  {
+    if(names.length > 0) {
+      names.forEach(name => {
+        let attr = this.attributes[name];
+        if(attr !== undefined) {
+          attr.needsUpdate = true;
+        }
+      });
+    }
+    else {
+      for(let name in attributes){
+        this.attributes[name].needsUpdate = true;
+      }
+    }
+  }
+
+
+  dispose()
+  {
+    //to be implemented
   }
 }
