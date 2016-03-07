@@ -2,29 +2,30 @@
 
 export default class Color
 {
-  constructor(r, g, b, a = 1)
+  constructor(r, g, b, a)
   {
-    if(r.constructor === Color){
-      this.copy(r);
-    }
-    else if(r === undefined){
-      this.set(0, 0, 0, 1);
-    }
-    else if(g === undefined || b === undefined){
-      this.hex = r;
-    }
-    else {
-      this.set(r, g, b, a);
-    }
+    this.set(r, g, b, a);
   }
 
 
   set(r, g, b, a = 1)
   {
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.a = a;
+    if(r === undefined){
+      this.r = this.g = this.b = 0;
+      this.a = 1;
+    }
+    else if(r.constructor === Color){
+      this.copy(r);
+    }
+    else if(g === undefined || b === undefined){
+      this.hex = r;
+    }
+    else {
+      this.r = r;
+      this.g = g;
+      this.b = b;
+      this.a = a;
+    }
     return this;
   }
 

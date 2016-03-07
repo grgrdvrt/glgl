@@ -6,6 +6,7 @@ export default class FrameBuffer
 {
   constructor (width, height)
   {
+    this.clearColor = new Color();
     this.frameSize = new Vec2();
     this.texture = new RttTexture(this);
     this.resize(width, height);
@@ -66,7 +67,8 @@ export default class FrameBuffer
     var gl = this.glContext;
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.enable(consts.DEPTH_TEST);
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    let c = this.clearcolor;
+    gl.clearColor(c.r, c.g, c.b, 1.0);
     gl.clear(consts.COLOR_BUFFER_BIT | consts.DEPTH_BUFFER_BIT);
   }
 

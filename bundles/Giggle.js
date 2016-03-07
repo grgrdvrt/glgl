@@ -39,7 +39,7 @@ export default class Giggle
 
     this.scene.add(new AmbientLight(0x888888));
 
-    this.context.viewport.resized.add((w, h) => this.camera.aspect = w / h);
+    this.context.resized.add((w, h) => this.camera.aspect = w / h);
 
   }
 
@@ -79,6 +79,13 @@ export default class Giggle
   render()
   {
     return this.sceneRenderer.render(this.scene, this.camera);
+  }
+
+
+  get backgroundColor() { return this.context.clearColor;}
+  set backgroundColor(value)
+  {
+    this.context.clearColor.set(value);
   }
 
 

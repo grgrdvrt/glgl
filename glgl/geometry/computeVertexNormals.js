@@ -26,19 +26,19 @@ export default function computeVertexNormals(positions, ids)
 
     e1.set(p[ia], p[ia + 1], p[ia + 2]).sub(v);
     e2.set(p[ic], p[ic + 1], p[ic + 2]).sub(v);
-    e1.cross(e2);
+    e2.cross(e1);
 
-    n[ia] += e1.x;
-    n[ia + 1] += e1.y;
-    n[ia + 2] += e1.z;
+    n[ia] += e2.x;
+    n[ia + 1] += e2.y;
+    n[ia + 2] += e2.z;
 
-    n[ib] += e1.x;
-    n[ib + 1] += e1.y;
-    n[ib + 2] += e1.z;
+    n[ib] += e2.x;
+    n[ib + 1] += e2.y;
+    n[ib + 2] += e2.z;
 
-    n[ic] += e1.x;
-    n[ic + 1] += e1.y;
-    n[ic + 2] += e1.z;
+    n[ic] += e2.x;
+    n[ic + 1] += e2.y;
+    n[ic + 2] += e2.z;
   }
 
 

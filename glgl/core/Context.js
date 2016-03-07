@@ -1,6 +1,7 @@
 import consts from "./consts";
 import DrawCallData from "./DrawCallData";
 import Vec2 from "../math/Vec2";
+import Color from "../math/Color";
 import Signal from "../../utils/Signal";
 
 export default class Context
@@ -14,6 +15,7 @@ export default class Context
 
     this._checkSizeBind = this.checkSize.bind(this);
     this.resized = new Signal();
+    this.clearColor = new Color();
     this.autoSize = true;
     this.autoClear = true;
     this.glFrameBuffer = null;
@@ -87,7 +89,8 @@ export default class Context
     var gl = this.glContext;
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.enable(consts.DEPTH_TEST);
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    let c = this.clearColor;
+    gl.clearColor(c.r, c.g, c.b, 1.0);
     gl.clear(consts.COLOR_BUFFER_BIT | consts.DEPTH_BUFFER_BIT);
   }
 
