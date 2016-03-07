@@ -6,7 +6,7 @@ import Program from "../glgl/core/Program";
 import Mesh from "../glgl/sceneObjects/Mesh";
 import QuadGeometry from "../glgl/primitives/QuadGeometry";
 import Loop from "../utils/Loop";
-import Mouse from "../utils/Mouse";
+import Mouse from "../inputs/Mouse";
 
 import Texture from "../glgl/core/Texture";
 

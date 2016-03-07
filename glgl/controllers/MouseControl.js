@@ -1,11 +1,10 @@
-import Mouse from "../../utils/Mouse";
 import Loop from "../../utils/Loop";
+import Mouse from "../../inputs/Mouse";
 import Sphere from "../math/Sphere";
 import Ray from "../math/Ray";
 import Vec2 from "../math/Vec2";
 import Vec3 from "../math/Vec3";
 import Mat3 from "../math/Mat3";
-import Quaternion from "../math/Quaternion";
 
 export default class MouseControl
 {
