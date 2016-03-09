@@ -30,10 +30,10 @@ export default class RttTexture extends Texture
 
   resize(w, h)
   {
-    let gl = this.context.glContext;
-    if(gl === undefined){
+    if(this.context === undefined){
       return;
     }
+    let gl = this.context.glContext;
     var fbo = this.frameBuffer;
     gl.activeTexture(gl.TEXTURE0 + this.textureId);
     gl.bindTexture(gl.TEXTURE_2D, this.glTexture);

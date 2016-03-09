@@ -49,7 +49,7 @@ import {
   Quaternion,
   Ray,
   Sphere,
-  utils,
+  utils as mathUtils,
   Vec2,
   Vec3
 } from "./math/";
@@ -86,6 +86,21 @@ import {
   TransformsVisitor,
   traverseTree
 } from "./sceneVisitors/";
+
+
+import {
+  Log,
+  Loop,
+  polyfills,
+  Signal,
+  utils
+} from "./utils";
+
+
+import {
+  Keyboard,
+  Mouse
+} from "./inputs";
 
 
 
@@ -128,7 +143,7 @@ export default {
   Quaternion,
   Ray,
   Sphere,
-  utils,
+  mathUtils,
   Vec2,
   Vec3,
 
@@ -155,5 +170,13 @@ export default {
   NamesVisitor,
   SceneRenderer,
   TransformsVisitor,
-  traverseTree
+  traverseTree,
+
+  Log,
+  Loop,
+  Signal,
+  utils,
+
+  Keyboard,
+  Mouse
 };

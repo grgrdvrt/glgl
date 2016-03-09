@@ -25,8 +25,8 @@ export default class QuadGeometry
     ]);
 
     let ids = new Uint16Array([
-      0, 2, 1,
-      0, 3, 2
+      0, 1, 2,
+      0, 2, 3
     ]);
 
     this.drawCallData.setIds(ids);

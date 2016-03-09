@@ -1,12 +1,15 @@
+import consts from "./consts";
 import RttTexture from "./RttTexture";
 import DrawCallData from "./DrawCallData";
 import Vec2 from "../math/Vec2";
+import Color from "../math/Color";
 
 export default class FrameBuffer
 {
   constructor (width, height)
   {
     this.clearColor = new Color();
+    this.drawCallData = new DrawCallData();
     this.frameSize = new Vec2();
     this.texture = new RttTexture(this);
     this.resize(width, height);
@@ -17,8 +20,9 @@ export default class FrameBuffer
 
   initGL(context)
   {
+    this.context = context;
+
     let gl = context.glContext;
-    this.glContext = gl;
 
     this.glFrameBuffer = gl.createFramebuffer();
 
@@ -65,10 +69,10 @@ export default class FrameBuffer
 
   clear()
   {
-    var gl = this.glContext;
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    var gl = this.context.glContext;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.glFrameBuffer);
     gl.enable(consts.DEPTH_TEST);
-    let c = this.clearcolor;
+    let c = this.clearColor;
     gl.clearColor(c.r, c.g, c.b, 1.0);
     gl.clear(consts.COLOR_BUFFER_BIT | consts.DEPTH_BUFFER_BIT);
   }

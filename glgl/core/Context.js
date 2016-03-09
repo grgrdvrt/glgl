@@ -113,9 +113,9 @@ export default class Context
     }
 
     let id;
-    for(let i = 0; i < maxIds; i++)
+    for(let i = 0; i < maxTextureIds; i++)
     {
-      if(!ids[i]){
+      if(!this.textureIds[i]){
         id = i;
         break;
       }

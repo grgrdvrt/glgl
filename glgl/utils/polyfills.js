@@ -13,7 +13,6 @@ window.cancelAnimationFrame = window.cancelAnimationFrame ||
 
 
 
-
 if(!Function.prototype.bind)
 {
   Function.prototype.bind = function(scope) 

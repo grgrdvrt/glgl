@@ -174,7 +174,6 @@ export default class DrawCall
       gl.viewport(0, 0, target.width, target.height);
     }
 
-
     this.program.setDefines(this.defines);
     if(!this.program.isInit) {
       this.program.initGL(context);
@@ -184,6 +183,7 @@ export default class DrawCall
 
     this._setAttributes(context);
     this._setUniforms(context);
+
 
 
     if(this.enableCulling){

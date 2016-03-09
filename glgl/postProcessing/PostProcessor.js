@@ -27,24 +27,21 @@ export default class PostProcessor
       this.context.width,
       this.context.height
     );
-    this.readBuffer.name = "first";
+    this.readBuffer.initGL(this.context);
+    this.readBuffer.name = "buff1";
+
     this.writeBuffer = new FrameBuffer(
       this.context.width,
       this.context.height
     );
-    this.writeBuffer.name = "second";
-    this.name = "pp";
+    this.writeBuffer.initGL(this.context);
+    this.writeBuffer.name = "buff2";
 
-    this.isInit = false;
-  }
-
-
-  initGL(gl)
-  {
-    this.readBuffer.initGL(gl);
-    this.writeBuffer.initGL(gl);
     this.isInit = true;
   }
+
+
+  initGL(context) { }
 
 
   get glFrameBuffer()
@@ -58,9 +55,16 @@ export default class PostProcessor
     return this.readBuffer.texture;
   }
 
-  get viewport()
+
+  get width()
   {
-    return this.writeBuffer.viewport;
+    return this.writeBuffer.width;
+  }
+
+
+  get height()
+  {
+    return this.writeBuffer.height;
   }
 
 
@@ -105,6 +109,13 @@ export default class PostProcessor
     this.readBuffer.clear();
     this.writeBuffer.clear();
   }
+
+
+  getDrawCallData()
+  {
+    return this.writeBuffer.getDrawCallData();
+  }
+
 
   dispose()
   {

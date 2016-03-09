@@ -229,4 +229,14 @@ export default class NormalMaterial
     });
     return this.drawCallData;
   }
+
+  set doubleFace(value)
+  {
+    this.drawCallData.enableCulling = !value;
+  }
+
+  get doubleFace()
+  {
+    return this.drawCallData.enableCulling === false;
+  }
 }

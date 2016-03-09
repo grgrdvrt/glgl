@@ -10,6 +10,7 @@ export default class DrawCallData
     this.attributes = {};
     this.uniforms = {};
 
+
     if(attributes){
       this.setAttributes(attributes);
     }
