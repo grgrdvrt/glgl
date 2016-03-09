@@ -1,4 +1,5 @@
 import DrawCallData from "../core/DrawCallData";
+import Sphere from "../math/Sphere";
 
 export default class Geometry
 {
@@ -7,6 +8,7 @@ export default class Geometry
     this.drawCallData = new DrawCallData();
     this.setIds(ids);
     this.setAttributes(buffers, ids);
+    this.boundingSphere = new Sphere();
   }
 
 
@@ -19,6 +21,11 @@ export default class Geometry
   setAttributes(buffers)
   {
     this.drawCallData.setAttributes(buffers);
+  }
+
+
+  getBoundingSphere()
+  {
   }
 
 

@@ -1,4 +1,4 @@
-import Mouse from "../../inputs/Mouse";
+import Mouse from "../inputs/Mouse";
 import Sphere from "../math/Sphere";
 import Ray from "../math/Ray";
 import Vec3 from "../math/Vec3";

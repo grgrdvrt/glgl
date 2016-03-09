@@ -15,13 +15,14 @@ export default class FrameBuffer
   }
 
 
-  initGL(gl)
+  initGL(context)
   {
+    let gl = context.glContext;
     this.glContext = gl;
 
     this.glFrameBuffer = gl.createFramebuffer();
 
-    this.texture.initGL(gl);
+    this.texture.initGL(context);
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.glFrameBuffer);
 

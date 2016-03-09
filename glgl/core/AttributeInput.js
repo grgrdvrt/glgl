@@ -28,10 +28,11 @@ export default class AttributeInput
   }
 
 
-  updateGL(gl, buffer)
+  updateGL(context, buffer)
   {
+    let gl = context.glContext;
     if(buffer.needsUpdate){
-      buffer.updateGL(gl);
+      buffer.updateGL(context);
     }
     gl.bindBuffer(consts.ARRAY_BUFFER, buffer.glBuffer);
     gl.vertexAttribPointer(this.location, this.itemSize, consts.FLOAT, false, 0, 0);

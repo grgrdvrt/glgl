@@ -99,8 +99,9 @@ export default class Program
   }
 
 
-  initGL(gl)
+  initGL(context)
   {
+    let gl = context.glContext;
     this.glProgram = gl.createProgram();
 
     let vSrc = this.vertexShaderSrc;

@@ -55,8 +55,9 @@ export default class DrawCall
   }
 
 
-  _setAttributes(gl)
+  _setAttributes(context)
   {
+    let gl = context.glContext;
     let inputs = this.program.attributesInputs;
     for(let i = 0; i < inputs.length; i++){
       let input = inputs[i];
@@ -71,41 +72,41 @@ export default class DrawCall
       if(buffer === undefined){
         console.warn("Missing buffer : ", input.name);
       }
-      if(!buffer.isInit){ buffer.initGL(gl); }
-      input.updateGL(gl, buffer);
+      if(!buffer.isInit){ buffer.initGL(context); }
+      input.updateGL(context, buffer);
     }
   }
 
-  _setInputs(gl, inputs, candidates)
+  _setInputs(context, inputs, candidates)
   {
     for(let name in inputs){
       let input = inputs[name];
       if(input.constructor === UniformInput){
-        this._setUniform(gl, name, input, candidates);
+        this._setUniform(context, name, input, candidates);
       }
       else if(Array.isArray(input)){
-        this._setArray(gl, name, input, candidates);
+        this._setArray(context, name, input, candidates);
       }
       else {
-        this._setStruct(gl, name, input, candidates);
+        this._setStruct(context, name, input, candidates);
       }
     }
   }
 
 
-  _setUniform(gl, name, input, candidates)
+  _setUniform(context, name, input, candidates)
   {
     for(let i = candidates.length - 1; i >= 0; i--){
       let data = candidates[i][name];
       if(data !== undefined){
-        input.updateGL(gl, data);
+        input.updateGL(context, data);
         break;
       }
     }
   }
 
 
-  _setArray(gl, name, input, candidates)
+  _setArray(context, name, input, candidates)
   {
     let newCandidates = [];
     for(let i = candidates.length - 1; i >= 0; i--){
@@ -123,12 +124,12 @@ export default class DrawCall
       }
     }
     for(let i = 0, n = Math.min(newCandidates.length, input.length); i < n; i++){
-      this._setInputs(gl, input[i], [newCandidates[i]]);
+      this._setInputs(context, input[i], [newCandidates[i]]);
     }
   }
 
 
-  _setStruct(gl, name, input, candidates)
+  _setStruct(context, name, input, candidates)
   {
     let newCandidates = [];
     for(let i = candidates.length - 1; i >= 0; i--){
@@ -137,11 +138,11 @@ export default class DrawCall
         newCandidates.push(data);
       }
     }
-    this._setInputs(gl, input, newCandidates);
+    this._setInputs(context, input, newCandidates);
   }
 
 
-  _setUniforms(gl)
+  _setUniforms(context)
   {
     let inputs = this.program.uniformsInputs;
     let uniforms = [];
@@ -149,7 +150,7 @@ export default class DrawCall
       uniforms[i] = this.drawCallDatas[i].uniforms;
     }
 
-    this._setInputs(gl, inputs, uniforms);
+    this._setInputs(context, inputs, uniforms);
   }
 
 
@@ -162,7 +163,7 @@ export default class DrawCall
     }
 
     if(!target.isInit) {
-     target.initGL(gl);
+     target.initGL(context);
     }
     gl.bindFramebuffer(gl.FRAMEBUFFER, target.glFrameBuffer);
 
@@ -176,13 +177,13 @@ export default class DrawCall
 
     this.program.setDefines(this.defines);
     if(!this.program.isInit) {
-      this.program.initGL(gl);
+      this.program.initGL(context);
     }
     var glProgram = this.program.glProgram;
     gl.useProgram(glProgram);
 
-    this._setAttributes(gl);
-    this._setUniforms(gl);
+    this._setAttributes(context);
+    this._setUniforms(context);
 
 
     if(this.enableCulling){
@@ -200,10 +201,10 @@ export default class DrawCall
     }
     else {
       if(!this.ids.isInit) {
-        this.ids.initGL(gl, glProgram);
+        this.ids.initGL(context, this.program);
       }
       if(this.ids.needsUpdate) {
-        this.ids.updateGL(gl);
+        this.ids.updateGL(context);
       }
 
       gl.bindBuffer(consts.ELEMENT_ARRAY_BUFFER, this.ids.buffer);

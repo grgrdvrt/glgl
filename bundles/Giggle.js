@@ -10,7 +10,7 @@ import Mesh from "../glgl/sceneObjects/Mesh";
 import Group from "../glgl/sceneObjects/Group";
 import SceneRenderer from "../glgl/sceneVisitors/SceneRenderer";
 
-import Loop from "../utils/Loop";
+import Loop from "../glgl/utils/Loop";
 
 import MouseControl from "../glgl/controllers/MouseControl";
 

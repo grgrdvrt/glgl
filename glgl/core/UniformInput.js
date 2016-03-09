@@ -54,9 +54,9 @@ export default class UniformInput
   }
 
 
-  updateGL(gl, data)
+  updateGL(context, data)
   {
-    this.updateFunc(gl, data.valueOf());
+    this.updateFunc(context.glContext, data.valueOf());
   }
 
 }

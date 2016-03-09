@@ -10,9 +10,10 @@ export default class RttTexture extends Texture
   }
 
 
-  initGL(gl)
+  initGL(context)
   {
-    super.initGL(gl);
+    super.initGL(context);
+    let gl = context.glContext;
     var fbo = this.frameBuffer;
     if(fbo.glFrameBuffer === undefined){
       throw new Error("frameBuffer not initialized");
@@ -29,7 +30,7 @@ export default class RttTexture extends Texture
 
   resize(w, h)
   {
-    let gl = this.glContext;
+    let gl = this.context.glContext;
     if(gl === undefined){
       return;
     }
@@ -41,8 +42,9 @@ export default class RttTexture extends Texture
   }
 
 
-  updateGL(gl)
+  updateGL(context)
   {
+    let gl = context.glContext;
     gl.activeTexture(gl.TEXTURE0 + this.textureId);
     gl.bindTexture(gl.TEXTURE_2D, this.glTexture);
     //gl.generateMipmap(gl.TEXTURE_2D);

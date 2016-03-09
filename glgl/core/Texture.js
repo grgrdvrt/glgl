@@ -6,7 +6,6 @@ export default class Texture
   {
     this.image = image;
     this.isInit = false;
-    this.textureId = getAvailableId();
   }
 
 
@@ -18,10 +17,13 @@ export default class Texture
   }
 
 
-  initGL(gl)
+  initGL(context)
   {
-    this.glContext = gl;
+    this.context = context;
+    let gl = this.context.glContext;
     this.glTexture = gl.createTexture();
+
+    this.textureId = context.getTextureId();
 
     gl.activeTexture(consts.TEXTURE0 + this.textureId);
     gl.bindTexture(consts.TEXTURE_2D, this.glTexture);
@@ -40,8 +42,9 @@ export default class Texture
   }
 
 
-  updateGL(gl)
+  updateGL(context)
   {
+    let gl = context.glContext;
     gl.activeTexture(consts.TEXTURE0 + this.textureId);
     gl.bindTexture(consts.TEXTURE_2D, this.glTexture);
     gl.pixelStorei(consts.UNPACK_FLIP_Y_WEBGL, true);
@@ -65,29 +68,6 @@ export default class Texture
 
   dispose()
   {
-    ids[i] = false;
     //TODO: actual dispose
   }
-}
-
-
-var ids = [];
-var maxIds = 32;
-
-function getAvailableId()
-{
-  var id;
-  for(var i = 0; i < maxIds; i++)
-  {
-    if(!ids[i]){
-      id = i;
-      break;
-    }
-  }
-  if(id === undefined){
-    throw new Error("Too many textures");
-  }
-  ids[id] = true;
-
-  return id;
 }

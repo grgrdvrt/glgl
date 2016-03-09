@@ -10,9 +10,9 @@ export default class AttributeBuffer
   }
 
 
-  initGL(gl)
+  initGL(context)
   {
-    this.glBuffer = gl.createBuffer();
+    this.glBuffer = context.glContext.createBuffer();
     this.isInit = true;
   }
 
@@ -24,8 +24,9 @@ export default class AttributeBuffer
   }
 
 
-  updateGL(gl)
+  updateGL(context)
   {
+    let gl = context.glContext;
     gl.bindBuffer(consts.ARRAY_BUFFER, this.glBuffer);
     gl.bufferData(consts.ARRAY_BUFFER, this.data, consts.STATIC_DRAW);
     this.needsUpdate = false;

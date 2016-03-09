@@ -1,5 +1,5 @@
-import Loop from "../../utils/Loop";
-import Mouse from "../../inputs/Mouse";
+import Loop from "../utils/Loop";
+import Mouse from "../inputs/Mouse";
 import Sphere from "../math/Sphere";
 import Ray from "../math/Ray";
 import Vec2 from "../math/Vec2";

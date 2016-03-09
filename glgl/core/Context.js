@@ -2,7 +2,9 @@ import consts from "./consts";
 import DrawCallData from "./DrawCallData";
 import Vec2 from "../math/Vec2";
 import Color from "../math/Color";
-import Signal from "../../utils/Signal";
+import Signal from "../utils/Signal";
+
+const maxTextureIds = 32;
 
 export default class Context
 {
@@ -101,5 +103,34 @@ export default class Context
       "uFrameSize":this.frameSize
     });
     return this.drawCallData;
+  }
+
+
+  getTextureId()
+  {
+    if(this.textureIds === undefined){
+      this.textureIds = [];
+    }
+
+    let id;
+    for(let i = 0; i < maxIds; i++)
+    {
+      if(!ids[i]){
+        id = i;
+        break;
+      }
+    }
+    if(id === undefined){
+      throw new Error("Too many textures");
+    }
+    this.textureIds[id] = true;
+
+    return id;
+  }
+
+
+  releaseTextureId(id)
+  {
+    this.textureIds[id] = false;
   }
 }

@@ -5,38 +5,38 @@ import SceneNode from "./SceneNode";
 
 
 let vertexSrc = `
-  precision mediump float;
+precision mediump float;
 
-  attribute vec3 aVertexPosition;
-  uniform mat4 globalTransform;
-  varying vec3 vPos;
+attribute vec3 aVertexPosition;
+uniform mat4 globalTransform;
+varying vec3 vPos;
 
-  struct Camera
-  {
-    mat4 transform;
-    mat4 globalTransform;
-    mat4 projection;
-    vec3 position;
-  };
-  uniform Camera camera;
+struct Camera
+{
+  mat4 transform;
+  mat4 globalTransform;
+  mat4 projection;
+  vec3 position;
+};
+uniform Camera camera;
 
-  void main()
-  {
-    vec4 vertexWorldPosition =  vec4(aVertexPosition, 1.0); 
-    vPos = vertexWorldPosition.xyz;
-    gl_Position = camera.projection * camera.transform * vertexWorldPosition;
-  }`;
+void main()
+{
+  vec4 vertexWorldPosition =  vec4(aVertexPosition, 1.0); 
+  vPos = vertexWorldPosition.xyz;
+  gl_Position = camera.projection * camera.transform * vertexWorldPosition;
+}`;
+
 
 let fragmentSrc = `
-  precision mediump float;
+precision mediump float;
 
-  varying vec3 vPos;
+varying vec3 vPos;
 
-  void main()
-  {
-    gl_FragColor = vec4(normalize(vPos), 1.0);
-    //gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-  }`;
+void main()
+{
+  gl_FragColor = vec4(normalize(vPos), 1.0);
+}`;
 
 
 export default class Basis extends SceneNode

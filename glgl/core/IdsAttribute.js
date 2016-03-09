@@ -19,16 +19,18 @@ export default class IdsAttribute
   }
 
 
-  initGL(gl, program)
+  initGL(context, program)
   {
+    let gl = context.glContext;
     this.buffer = gl.createBuffer();
-    this.location = gl.getAttribLocation(program, "ids");
+    this.location = gl.getAttribLocation(program.glProgram, "ids");
     this.isInit = true;
   }
 
 
-  updateGL(gl)
+  updateGL(context)
   {
+    let gl = context.glContext;
     if(this.type !== consts.UNSIGNED_INT && this.data.constructor === Uint32Array){
       let extension = gl.getExtension("OES_element_index_uint");
       if(extension === undefined){
