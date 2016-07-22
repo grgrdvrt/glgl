@@ -37,7 +37,8 @@ export default class BasicSetup
     this.directionalLight = new DirectionalLight();
     this.scene.add(this.directionalLight);
 
-    this.scene.add(new AmbientLight(0x888888));
+    this.ambientLight = new AmbientLight(0x888888);
+    this.scene.add(this.ambientLight);
 
     this.context.resized.add((w, h) => this.camera.aspect = w / h);
 
@@ -58,9 +59,9 @@ export default class BasicSetup
   }
 
 
-  create(geometry)
+  create(geometry, material)
   {
-    let mesh = new Mesh(geometry, this.defaultMaterial);
+    let mesh = new Mesh(geometry, material || this.defaultMaterial);
     this.scene.add(mesh);
     return mesh;
   }

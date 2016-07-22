@@ -2,6 +2,16 @@
 
 export default class Color
 {
+
+  static createRandom()
+  {
+    return new Color(
+      Math.random(),
+      Math.random(),
+      Math.random()
+    );
+  }
+
   constructor(r, g, b, a)
   {
     this.set(r, g, b, a);
@@ -57,7 +67,7 @@ export default class Color
   //returns rgb hex, no alpha
   get hex()
   {
-    return (this.r << 16) | (this.g << 8) | this.b;
+    return ((0xff * this.r) << 16) | ((0xff * this.g) << 8) | (0xff * this.b);
   }
 
 

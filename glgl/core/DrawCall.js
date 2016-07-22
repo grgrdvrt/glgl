@@ -69,7 +69,7 @@ export default class DrawCall
           break;
         }
       }
-      if(buffer === undefined){
+      if(!buffer){
         console.warn("Missing buffer : ", input.name);
       }
       if(!buffer.isInit){ buffer.initGL(context); }
