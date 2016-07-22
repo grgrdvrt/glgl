@@ -15,7 +15,7 @@ import Loop from "../glgl/utils/Loop";
 import MouseControl from "../glgl/controllers/MouseControl";
 
 
-export default class Giggle
+export default class BasicSetup
 {
   constructor()
   {
