@@ -28,6 +28,19 @@ uploadFuncs[consts.SAMPLER_2D] = function(context, data){
   gl.uniform1i(this.location, data.textureId);
 };
 
+uploadFuncs[consts.SAMPLER_CUBE] = function(context, data){
+  let gl = context.glContext;
+  if(!data.isInit){
+    data.initGL(context);
+  }
+  if(data.needsUpdate){
+    data.updateGL(context);
+  }
+  gl.activeTexture(gl.TEXTURE0 + data.textureId);
+  gl.bindTexture(gl.TEXTURE_CUBE_MAP, data.glTexture);
+  gl.uniform1i(this.location, data.textureId);
+};
+
 
 let uploadFuncsV = {};
 uploadFuncsV[consts.FLOAT] = function(gl, data){ gl.uniform1fv(this.location, data);};

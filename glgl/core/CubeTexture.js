@@ -16,7 +16,6 @@ export default class CubeTexture
   {
     this.images = images;
     this.isInit = false;
-    this.textureId = getAvailableId();
   }
 
 

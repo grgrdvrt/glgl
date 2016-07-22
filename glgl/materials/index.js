@@ -5,6 +5,7 @@ import SolidMaterial from "./SolidMaterial";
 import TestMaterial from "./TestMaterial";
 import TextureMaterial from "./TextureMaterial";
 import TunnelMaterial from "./TunnelMaterial";
+import CubeMaterial from "./CubeMaterial";
 
 export default {
   LightMaterial,
@@ -13,5 +14,6 @@ export default {
   SolidMaterial,
   TestMaterial,
   TextureMaterial,
-  TunnelMaterial
+  TunnelMaterial,
+  CubeMaterial
 };

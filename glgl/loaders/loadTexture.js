@@ -1,15 +1,10 @@
 import Texture from "../core/Texture";
+import loadImage from "./loadImage";
+
 export default function loadTexture(url, textureOptions)
 {
-  return fetch(url).then(response => {
-    return response.blob();
-  }).then((imageBlob) => {
-    let image = new Image();
-    image.src = URL.createObjectURL(imageBlob);
-    return new Promise((resolve, reject) => {
-      image.onload = () => {
-        resolve(new Texture(image, textureOptions));
-      };
-    });
+  return loadImage(url).then(image => {
+    console.log("image", image);
+    return new Texture(image, textureOptions);
   });
 }
