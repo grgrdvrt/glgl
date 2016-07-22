@@ -30,6 +30,15 @@ export default class Color
   }
 
 
+  scale(value)
+  {
+    this.r *= value;
+    this.g *= value;
+    this.b *= value;
+    return this;
+  }
+
+
   copy(color)
   {
     this.r = color.r;

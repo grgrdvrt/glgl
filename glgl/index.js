@@ -28,7 +28,9 @@ import {
 
 import {
   loadObj,
-  loadTexture
+  loadImage,
+  loadTexture,
+  loadCubeTexture
 } from "./loaders/";
 
 import {
@@ -38,7 +40,8 @@ import {
   SolidMaterial,
   TestMaterial,
   TextureMaterial,
-  TunnelMaterial
+  TunnelMaterial,
+  CubeMaterial
 } from "./materials/";
 
 import {
@@ -49,6 +52,7 @@ import {
   Quaternion,
   Ray,
   Sphere,
+  Box,
   utils as mathUtils,
   Vec2,
   Vec3
@@ -126,7 +130,9 @@ export default {
   SpotLight,
 
   loadObj,
+  loadImage,
   loadTexture,
+  loadCubeTexture,
 
   LightMaterial,
   NormalMaterial,
@@ -135,6 +141,7 @@ export default {
   TestMaterial,
   TextureMaterial,
   TunnelMaterial,
+  CubeMaterial,
 
   Color,
   Mat2,
@@ -143,6 +150,7 @@ export default {
   Quaternion,
   Ray,
   Sphere,
+  Box,
   mathUtils,
   Vec2,
   Vec3,

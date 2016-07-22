@@ -37,7 +37,8 @@ export default class Giggle
     this.directionalLight = new DirectionalLight();
     this.scene.add(this.directionalLight);
 
-    this.scene.add(new AmbientLight(0x888888));
+    this.ambientLight = new AmbientLight(0x888888);
+    this.scene.add(this.ambientLight);
 
     this.context.resized.add((w, h) => this.camera.aspect = w / h);
 

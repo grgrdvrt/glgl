@@ -10,10 +10,10 @@ export default class DirectionalLight extends SceneNode
     this.isLightEmitter = true;
     this.lightType = "directional";
 
-    this.diffuse = new Color(0.6, 0.4, 0.4);
+    this.diffuse = new Color(0.8, 0.8, 0.8);
     this.specular = new Color(0.8, 0.8, 0.8);
-    this.ambient = new Color(0.6, 0.4, 0.4);
-    this.direction = new Vec3(0.5, 1, 1);
+    this.ambient = new Color(0.8, 0.8, 0.8);
+    this.direction = new Vec3(-1, -1, -1);
   }
 
   getDrawCallData()

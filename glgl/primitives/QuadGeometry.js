@@ -17,6 +17,13 @@ export default class QuadGeometry
       -1, 1, 0
     ]);
 
+    let normals = new Float32Array([
+      0, 0, 1,
+      0, 0, 1,
+      0, 0, 1,
+      0, 0, 1
+    ]);
+
     let uvs = new Float32Array([
       0, 0,
       1, 0,
@@ -32,6 +39,7 @@ export default class QuadGeometry
     this.drawCallData.setIds(ids);
     this.drawCallData.setAttributes({
       aVertexPosition:positions,
+      aVertexNormal:normals,
       aUV:uvs,
     });
 
